@@ -1,0 +1,132 @@
+# =============================
+# File: docker-compose.yml
+# =============================
+version: "3.9"
+
+services:
+  # ── Three MCP backends, each stands in for one LLM ───────────────────────────
+  mcp_a:
+    build: ./mcp_sim
+    restart: unless-stopped
+    environment:
+      NAME: "fast-cheap"
+      INFER_MEAN_MS: "90"
+      INFER_JITTER_MS: "40"
+      FAIL_RATE: "0.00"
+    ports: # internal-only (safe for multiple services)
+      - "8000"
+    healthcheck:
+      test: [ "CMD", "curl", "-sf", "http://localhost:8000/health" ]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+
+  mcp_b:
+    build: ./mcp_sim
+    restart: unless-stopped
+    environment:
+      NAME: "strong-general"
+      INFER_MEAN_MS: "140"
+      INFER_JITTER_MS: "60"
+      FAIL_RATE: "0.00"
+    ports:
+      - "8000"
+    healthcheck:
+      test: [ "CMD", "curl", "-sf", "http://localhost:8000/health" ]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+
+  mcp_c:
+    build: ./mcp_sim
+    restart: unless-stopped
+    environment:
+      NAME: "code-specialist"
+      INFER_MEAN_MS: "170"
+      INFER_JITTER_MS: "80"
+      FAIL_RATE: "0.00"
+    ports:
+      - "8000"
+    healthcheck:
+      test: [ "CMD", "curl", "-sf", "http://localhost:8000/health" ]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+
+  # ── RL router (now told explicitly about 3 targets) ─────────────────────────
+  rl_router:
+    build: ./router
+    restart: unless-stopped
+    depends_on:
+      - mcp_a
+      - mcp_b
+      - mcp_c
+    environment:
+      POLICY: "ppo"             # or "epsilon" for baseline
+      EPSILON: "0.1"
+      METRICS_WINDOW: "50"
+      BACKEND_TARGETS: "http://mcp_a:8000,http://mcp_b:8000,http://mcp_c:8000"
+      N_HINT: "3"               # action space = 3 backends
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-sf", "http://localhost:8080/health" ]
+      interval: 10s
+      timeout: 2s
+      retries: 5
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - rl_router
+      - cadvisor
+      - dcgm
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "8089:8080"
+
+  dcgm:
+    image: nvidia/dcgm-exporter:latest
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    ports:
+      - "9400:9400"
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+
+  locust:
+    image: locustio/locust:latest
+    depends_on:
+      - rl_router
+    volumes:
+      - ./locust:/mnt/locust
+    command: ["-f", "/mnt/locust/locustfile.py", "--host", "http://rl_router:8080", "--headless", "-u", "50", "-r", "5", "-t", "5m"]
+    ports:
+      - "8081:8089"

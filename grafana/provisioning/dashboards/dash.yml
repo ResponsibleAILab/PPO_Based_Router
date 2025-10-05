@@ -1,0 +1,14 @@
+# =============================
+# File: grafana/provisioning/dashboards/dash.yml
+# =============================
+apiVersion: 1
+providers:
+  - name: 'MARL Router'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards

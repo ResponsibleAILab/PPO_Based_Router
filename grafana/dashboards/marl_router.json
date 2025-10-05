@@ -1,0 +1,48 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Throughput (req/s)",
+      "targets": [
+        {"expr": "rate(router_requests_total[1m])", "legendFormat": "req/s"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+    },
+    {
+      "type": "timeseries",
+      "title": "Latency p95 (s)",
+      "targets": [
+        {"expr": "histogram_quantile(0.95, sum(rate(router_end_to_end_latency_seconds_bucket[1m])) by (le))", "legendFormat": "p95"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+    },
+    {
+      "type": "bargauge",
+      "title": "Routing Distribution (5m)",
+      "targets": [
+        {"expr": "sum by (backend) (increase(router_routed_total[5m]))", "legendFormat": "{{backend}}"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+    },
+    {
+      "type": "timeseries",
+      "title": "GPU Utilization (%)",
+      "targets": [
+        {"expr": "max by (gpu) (DCGM_FI_DEV_GPU_UTIL)", "legendFormat": "GPU {{gpu}}"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+    }
+  ],
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["marl", "mcp", "router"],
+  "time": {"from": "now-1h", "to": "now"},
+  "timezone": "",
+  "title": "MARL Router Overview",
+  "version": 1
+}
