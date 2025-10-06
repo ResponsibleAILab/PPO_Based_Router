@@ -1,59 +1,67 @@
-# =============================
-# File: docker-compose.yml
-# =============================
 version: "3.9"
 
 services:
-  # ── Three MCP backends, each stands in for one LLM ───────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
   mcp_a:
-    build: ./mcp_sim
+    build: ./mcp_ollama_adapter
     restart: unless-stopped
     environment:
+      OLLAMA_BASE_URL: "http://ollama:11434"
+      MODEL_NAME: "mistral:7b-instruct"
       NAME: "fast-cheap"
-      INFER_MEAN_MS: "90"
-      INFER_JITTER_MS: "40"
-      FAIL_RATE: "0.00"
-    ports: # internal-only (safe for multiple services)
+    ports:
       - "8000"
+    depends_on: [ollama]
     healthcheck:
-      test: [ "CMD", "curl", "-sf", "http://localhost:8000/health" ]
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/health"]
       interval: 10s
       timeout: 2s
       retries: 5
 
   mcp_b:
-    build: ./mcp_sim
+    build: ./mcp_ollama_adapter
     restart: unless-stopped
     environment:
+      OLLAMA_BASE_URL: "http://ollama:11434"
+      MODEL_NAME: "llama3.1:8b-instruct"
       NAME: "strong-general"
-      INFER_MEAN_MS: "140"
-      INFER_JITTER_MS: "60"
-      FAIL_RATE: "0.00"
     ports:
       - "8000"
+    depends_on: [ollama]
     healthcheck:
-      test: [ "CMD", "curl", "-sf", "http://localhost:8000/health" ]
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/health"]
       interval: 10s
       timeout: 2s
       retries: 5
 
   mcp_c:
-    build: ./mcp_sim
+    build: ./mcp_ollama_adapter
     restart: unless-stopped
     environment:
+      OLLAMA_BASE_URL: "http://ollama:11434"
+      MODEL_NAME: "codellama:7b-instruct"
       NAME: "code-specialist"
-      INFER_MEAN_MS: "170"
-      INFER_JITTER_MS: "80"
-      FAIL_RATE: "0.00"
     ports:
       - "8000"
+    depends_on: [ollama]
     healthcheck:
-      test: [ "CMD", "curl", "-sf", "http://localhost:8000/health" ]
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/health"]
       interval: 10s
       timeout: 2s
       retries: 5
 
-  # ── RL router (now told explicitly about 3 targets) ─────────────────────────
   rl_router:
     build: ./router
     restart: unless-stopped
@@ -62,15 +70,15 @@ services:
       - mcp_b
       - mcp_c
     environment:
-      POLICY: "ppo"             # or "epsilon" for baseline
+      POLICY: "ppo"
       EPSILON: "0.1"
       METRICS_WINDOW: "50"
       BACKEND_TARGETS: "http://mcp_a:8000,http://mcp_b:8000,http://mcp_c:8000"
-      N_HINT: "3"               # action space = 3 backends
+      N_HINT: "3"
     ports:
       - "8080:8080"
     healthcheck:
-      test: [ "CMD", "curl", "-sf", "http://localhost:8080/health" ]
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/health"]
       interval: 10s
       timeout: 2s
       retries: 5
@@ -130,3 +138,6 @@ services:
     command: ["-f", "/mnt/locust/locustfile.py", "--host", "http://rl_router:8080", "--headless", "-u", "50", "-r", "5", "-t", "5m"]
     ports:
       - "8081:8089"
+
+volumes:
+  ollama_models:

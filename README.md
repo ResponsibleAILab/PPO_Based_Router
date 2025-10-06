@@ -1,50 +1,66 @@
-# Gitlab component template
-
-<!--
-Update this readme with your component details. Replace content in `< >` with your project information.
-For more information:
-
-- How to create a CI/CD component: https://docs.gitlab.com/ee/ci/components/#write-a-component
-- How to write a clear README.md file: https://docs.gitlab.com/ee/ci/components/#write-a-clear-readmemd
-- CI/CD Component security best practices: https://docs.gitlab.com/ee/ci/components/#cicd-component-security-best-practices
--->
-
-<!-- Uncomment and update the following link to display a release badge: https://docs.gitlab.com/ee/user/project/badges.html#latest-release-badges -->
-<!-- [![Latest Release](https://gitlab.com/<your project path>/-/badges/release.svg)](https://gitlab.com/<your project path>/-/releases) -->
-
-## Components
-
-### `<Component-name>`
-
-Use this component to `<component-description>`.
-
-To add this component to your CI/CD pipeline, add the following include entry to your
-project's CI/CD configuration:
-
-```yaml
-include:
-  - component: https://gitlab.com/<your project path>/<name of your template>@<tag>
-```
-
-Where `<tag>` is the release tag you want to use ([releases list](https://gitlab.com/<your-project-path>/-/releases)).
-
-## Inputs
-
-The template contains some optional [inputs](https://docs.gitlab.com/ee/ci/yaml/inputs.html):
-
-<!-- Add or update rows if you change the inputs in the template -->
-
-| Input      | Default value    | Description |
-|------------|------------------|-------------|
-| `job_name` | `job-template`   | The job name. |
-| `image`    | `busybox:latest` | The container image to use to run the job. |
-| `stage`    | `test`           | The stage name for the job. |
+# RL MCP Server Project
 
 ## Documentation
 
-This project includes a MVC structure to help you get started with [Gitlab CI/CD components](https://docs.gitlab.com/ee/ci/components/).
-The template provides the basic file structure to create your own single component.
-This project should be public, or one of the jobs in the project's pipeline won't work.
+Current state of the program is as follows. It is a multi-LLM router that uses reinforcement learning (PPO) to 
+decide which of three LLMs should answer each request. Everything is containerized so you can start/stop the
+whole system with Docker Compose, observe it with Prometheus/Grafana, and (optionally) generate traffic with
+Locust.
+
+### Summary
+It’s a learning router for three containerized LLMs that takes each incoming task, evaluates how well each 
+model has been performing, and uses reinforcement learning logic to select the LLM most likely to give the 
+best response. Over time, it keeps improving its choices based on experience—while you can watch the 
+learning process unfold in Grafana.
+
+### What Learning Means
+- State: recent performance signals per model (mean, p95, queue proxy).
+
+- Action: choose one of the 3 LLMs.
+
+- Reward: currently negative latency (you can later add quality and cost terms).
+
+- Update: PPO runs small online updates after gathering enough samples, so routing gradually shifts toward better models for the workload you’re sending.
+
+### How a Request Flows
+1. You (or Locust) send POST /infer to the RL Router.
+
+2. The router constructs a quick “state” for each model: recent mean latency, p95 latency, and a small queue proxy (all from sliding windows).
+
+3. PPO policy looks at those features and chooses an action = which model to call (A/B/C).
+
+4. The router forwards the request to the chosen MCP adapter, which calls Ollama, which runs the actual LLM and returns text.
+
+5. The router measures total latency and treats reward = –latency (faster is better).
+It logs metrics and updates the PPO policy periodically, so it’s more likely to pick models that performed well under current conditions.
+
+### Main Pieces
+- RL Router (FastAPI + PPO): Receives user prompts, watches how fast each model responds, and learns which model to pick to minimize latency (and later, you can include quality/cost).
+
+- Three LLM backends (MCP adapters): Lightweight HTTP services that expose /infer and call Ollama under the hood to run real models (e.g., Mistral, Llama 3, CodeLlama). Each adapter represents one “LLM choice”.
+
+- Ollama: A local model server that actually runs the models. The adapters call Ollama’s API.
+
+- Monitoring: Prometheus scrapes metrics; Grafana shows dashboards (throughput, p95 latency, routing distribution).
+
+- (Optional) Locust: Sends a stream of prompts so the router has data to learn from.
+
+### Why Adapters + Ollama
+- The adapters give you a stable, uniform /infer API that your router already understands.
+
+- Ollama makes running real models simple (CPU or GPU) without a heavy serving stack.
+- Later, you can swap Ollama for a GPU-first server (e.g., vLLM) and keep the same router.
+
+### Typical Lifecycle
+1. Start the stack (Compose), pull models in Ollama (first time only).
+
+2. Send prompts (manual or Locust) so PPO has data.
+
+3. Watch dashboards to see routing and latency improve.
+
+4. Stop the stack when done.
+
+Note: unless you add a small checkpoint, PPO’s learned weights live in memory and reset when you docker compose down.
 
 ## Licence
 
