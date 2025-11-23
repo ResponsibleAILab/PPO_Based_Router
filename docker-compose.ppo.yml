@@ -82,11 +82,11 @@ services:
       - mcp_b
       - mcp_c
     volumes:
-      - ./checkpoints:/app/checkpoints
+      - ./checkpoints:/app/checkpoints:ro
       - ./logs:/app/logs
     environment:
-      #POLICY: "ppo"
-      POLICY: "epsilon"
+      POLICY: "ppo"
+      #POLICY: "epsilon"
       EPSILON: "0.15"
       METRICS_WINDOW: "50"
       BACKEND_TARGETS: "http://mcp_a:8000,http://mcp_b:8000,http://mcp_c:8000"
@@ -97,10 +97,11 @@ services:
       # Changed from above to freeze training the model
       SAVE_EVERY_UPDATES: "0"
       UPDATE_EVERY: "100000000"
-      ALPHA_QUALITY: "1.0"
-      BETA_LAT: "1.0"
-      GAMMA_COST: "0.001"
+      ALPHA_QUALITY: "2.5" # was 1.0 -> emphasize quality ~2.5x stronger
+      BETA_LAT: "0.5" # was 1.0 -> penalize latency half as much
+      GAMMA_COST: "0.002" # was 0.001 -> keep a small cost pressure
       COSTS_PER_TOKEN: "0.5,1.0,0.7"
+      ROUTER_JSONL: "/app/logs/route_log_ppo.jsonl"
     ports:
       - "8080:8080"
     healthcheck:

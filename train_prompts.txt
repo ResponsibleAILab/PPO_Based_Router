@@ -1,0 +1,211 @@
+1) Write a Python function reverse_string(s) that returns the reversed string. (Constraint: use slicing)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write a Python function reverse_string(s) that returns the reversed string. (Constraint: use a loop)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement is_anagram(a, b) that returns True if a and b are anagrams (letters only, ignore case and spaces). (Constraint: use Counter)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement is_anagram(a, b) that returns True if a and b are anagrams (letters only, ignore case and spaces). (Constraint: use sorting)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write is_palindrome_ignore(s) returning True if s is a palindrome ignoring spaces, punctuation, and case. (Constraint: regex normalize)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Write is_palindrome_ignore(s) returning True if s is a palindrome ignoring spaces, punctuation, and case. (Constraint: two-pointer)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement longest_common_prefix(words) returning the longest prefix shared by all strings. (Constraint: vertical scan)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement longest_common_prefix(words) returning the longest prefix shared by all strings. (Constraint: zip(*) trick)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write word_count(s) returning a case-insensitive dict of word→count (strip punctuation). (Constraint: regex tokens)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write word_count(s) returning a case-insensitive dict of word→count (strip punctuation). (Constraint: split on whitespace)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement two_sum(nums, target) returning indices of two numbers that add to target; assume one solution. (Constraint: hashmap)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement two_sum(nums, target) returning indices of two numbers that add to target; assume one solution. (Constraint: sorted indices)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Write move_zeroes(nums) in-place to move all 0s to the end while preserving order. (Constraint: two-pointer)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write move_zeroes(nums) in-place to move all 0s to the end while preserving order. (Constraint: stable, no extra array)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement product_except_self(nums) without division. (Constraint: O(1) extra space)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement product_except_self(nums) without division. (Constraint: explicit prefix/suffix arrays)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write rotate_left(arr, k) that rotates the list left by k positions in O(n). (Constraint: triple-reverse)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Write rotate_left(arr, k) that rotates the list left by k positions in O(n). (Constraint: slicing)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement binary_search(arr, x) returning index in sorted arr or -1. (Constraint: iterative)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement binary_search(arr, x) returning index in sorted arr or -1. (Constraint: recursive)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write is_prime(n) using trial division up to sqrt(n). (Constraint: early exits for small n)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write is_prime(n) using trial division up to sqrt(n). (Constraint: skip evens, handle n<=1)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement gcd(a, b) with Euclid’s algorithm and lcm(a, b) using gcd. (Constraint: iterative)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement gcd(a, b) with Euclid’s algorithm and lcm(a, b) using gcd. (Constraint: recursive)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Write fibonacci(n) iterative O(1) space. (Constraint: classic loop)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write fibonacci(n) iterative O(1) space. (Constraint: mention fast-doubling as alternative)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement factorial(n) iteratively; return 1 for n=0. (Constraint: negative n invalid)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement factorial(n) iteratively; return 1 for n=0. (Constraint: large n behavior)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write roman_to_int(s) and int_to_roman(n). (Constraint: subtractive pairs)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Write roman_to_int(s) and int_to_roman(n). (Constraint: greedy encode)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement is_valid_parentheses(s) for (), {}, []. (Constraint: stack)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement decode_string(s) with k[encoded], supports nesting like 3[a2[c]]. (Constraint: stack for counts/substrings)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Create simplify_path(path) for Unix-style paths. (Constraint: stack for .. and .)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement parse_csv_line(line) handling quotes and commas. (Constraint: finite-state parsing)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write slugify(s) converting to lowercase and hyphens; remove disallowed chars. (Constraint: collapse repeats)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement MinStack: push, pop, top, get_min in O(1). (Constraint: two stacks)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement LRUCache(capacity) with get/put in O(1). (Constraint: hashmap + doubly linked list)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement a queue using two stacks (amortized O(1)). (Constraint: lazy transfer)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement a simple Trie with insert, search, startsWith. (Constraint: dict children)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement Disjoint Set Union with path compression + union by rank. (Constraint: union by size or rank)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write shortest_path_grid(grid, start, goal) using BFS (4-neighbor). (Constraint: return length)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement num_islands(grid) counting connected components of 1s (4-direction). (Constraint: DFS)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write topological_sort(graph) or report cycle if not DAG. (Constraint: Kahn’s algorithm)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement dijkstra(graph, src) for non-negative weights. (Constraint: min-heap)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement bellman_ford(graph, src) and detect negative cycles. (Constraint: edge list)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write coin_change_min(coins, amount) returning min coins or -1. (Constraint: bottom-up DP)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement length_of_LIS(nums) in O(n log n). (Constraint: tails + binary search)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write max_subarray_sum(nums) via Kadane’s algorithm. (Constraint: return max sum)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement levenshtein(a, b) edit distance. (Constraint: classic DP table)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement min_window_substring(s, t). (Constraint: sliding window + counts)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write atoi_robust(s) handling sign, whitespace, and 32-bit overflow. (Constraint: clamp bounds)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement valid_ip(s) returning 'IPv4', 'IPv6', or 'Neither'. (Constraint: strict validation rules)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write can_book(existing, new_interval) rejecting overlaps. (Constraint: half-open intervals)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.

@@ -1,0 +1,104 @@
+1) Write a Python function to reverse a list.\n2) Explain how it works.\n3) Add 2 unit tests.
+1) Implement a function that checks if a string is a palindrome.\n2) Explain the time complexity.\n3) Provide 3 unit tests.
+1) Write a function to compute the factorial iteratively.\n2) Explain iterative vs recursive tradeoffs.\n3) Add 2 tests including edge cases.
+1) Implement bubble sort for a list of integers.\n2) Explain why its complexity is O(n^2).\n3) Provide 2 unit tests.
+1) Write a function to merge two sorted lists.\n2) Explain a stable merge.\n3) Provide 3 unit tests.
+1) Implement binary search.\n2) Explain the invariants you maintain.\n3) Add 3 unit tests including not-found.
+1) Write a function to remove duplicates while preserving order.\n2) Explain your approach.\n3) Add 2 unit tests.
+1) Implement a function to count word frequencies from text.\n2) Explain choices for punctuation handling.\n3) Provide 2 unit tests.
+1) Write a function to find the kth smallest element.\n2) Explain a heap-based approach.\n3) Add 3 unit tests.
+1) Implement a function to check balanced parentheses.\n2) Explain the stack usage.\n3) Provide 3 unit tests.
+1) Write a function to rotate a list by k positions.\n2) Explain your method and complexity.\n3) Add 3 unit tests.
+1) Implement FizzBuzz returning a list of strings 1..n.\n2) Explain the branching logic.\n3) Provide 3 unit tests.
+1) Write a function to flatten a nested list one level.\n2) Explain edge cases.\n3) Add 2 unit tests.
+1) Implement a function that chunks a list into size n.\n2) Explain memory considerations.\n3) Provide 3 unit tests.
+1) Write a function to compute a running average over a stream.\n2) Explain numerical stability concerns.\n3) Add 2 unit tests.
+1) Implement a function to detect anagrams.\n2) Explain sorting vs counting approaches.\n3) Provide 3 unit tests.
+1) Write a function to remove Nones from a nested dict.\n2) Explain recursion strategy.\n3) Add 2 unit tests.
+1) Implement a function to URL-encode a dict of params.\n2) Explain edge cases with spaces and unicode.\n3) Provide 3 unit tests.
+1) Write a function to parse ISO8601 dates.\n2) Explain timezone handling.\n3) Add 2 unit tests.
+1) Implement a function to compute Levenshtein distance.\n2) Explain dynamic programming table.\n3) Provide 2 unit tests.
+1) Write a function to find all substrings of length k.\n2) Explain complexity and sliding window.\n3) Add 2 unit tests.
+1) Implement a simple LRU cache class.\n2) Explain time complexity per operation.\n3) Provide 3 unit tests.
+1) Write a function to compute prefix sums.\n2) Explain how to use them for range queries.\n3) Add 2 unit tests.
+1) Implement a function to transpose a matrix.\n2) Explain constraints for non-rectangular input.\n3) Provide 2 unit tests.
+1) Write a function to detect cycles in a linked list.\n2) Explain Floyd’s tortoise-hare algorithm.\n3) Add 3 unit tests.
+1) Implement a function to serialize and deserialize JSON safely.\n2) Explain error handling strategy.\n3) Provide 2 unit tests.
+1) Write a function to compute gcd and lcm.\n2) Explain Euclid’s algorithm.\n3) Add 3 unit tests.
+1) Implement a function to topologically sort a DAG.\n2) Explain Kahn’s algorithm.\n3) Provide 2 unit tests.
+1) Write a function to group items by a key function.\n2) Explain stable grouping.\n3) Add 2 unit tests.
+1) Implement a function to count unique visitors from log lines.\n2) Explain memory tradeoffs.\n3) Provide 2 unit tests.
+1) Write a function to detect duplicates using a set.\n2) Explain hash collisions briefly.\n3) Add 2 unit tests.
+1) Implement a function to compute moving median with a window.\n2) Explain two-heaps technique.\n3) Provide 2 unit tests.
+1) Write a function to normalize whitespace in text.\n2) Explain regex vs split-join.\n3) Add 2 unit tests.
+1) Implement a function to compute histogram bins for integers.\n2) Explain off-by-one pitfalls.\n3) Provide 3 unit tests.
+1) Write a function to find the longest common prefix of strings.\n2) Explain early stopping optimization.\n3) Add 2 unit tests.
+1) Implement a function to read a CSV and sum a column.\n2) Explain parsing robustness.\n3) Provide 2 unit tests.
+1) Write a function to compute prime numbers up to n (Sieve).\n2) Explain sieve complexity.\n3) Add 3 unit tests.
+1) Implement a function to validate IPv4 addresses.\n2) Explain the checks performed.\n3) Provide 3 unit tests.
+1) Write a function to pretty-print a JSON string.\n2) Explain indentation handling.\n3) Add 2 unit tests.
+1) Implement a function to random-sample k items from a list.\n2) Explain reservoir sampling briefly.\n3) Provide 2 unit tests.
+1) Write a function to compute a simple checksum of a string.\n2) Explain collision risks.\n3) Add 2 unit tests.
+1) Implement a function to detect pangrams.\n2) Explain set coverage method.\n3) Provide 2 unit tests.
+1) Write a function to compute column-wise means of a 2D list.\n2) Explain missing-value handling choice.\n3) Add 2 unit tests.
+1) Implement a function to compute n-th Fibonacci with memoization.\n2) Explain memoization benefits.\n3) Provide 3 unit tests.
+1) Write a function to parse key=value pairs from text.\n2) Explain error cases.\n3) Add 2 unit tests.
+1) Implement a function to format a duration in hh:mm:ss.\n2) Explain rounding rules.\n3) Provide 2 unit tests.
+1) Write a function to strip HTML tags from a string.\n2) Explain why regex can be brittle.\n3) Add 2 unit tests.
+1) Implement a function to compute cosine similarity of two vectors.\n2) Explain normalization.\n3) Provide 2 unit tests.
+1) Write a function to split text into sentences.\n2) Explain heuristic limitations.\n3) Add 2 unit tests.
+1) Implement a function to count lines, words, chars of a file.\n2) Explain encoding handling.\n3) Provide 2 unit tests.
+1) Write a function to detect if two intervals overlap.\n2) Explain closed vs open intervals.\n3) Add 3 unit tests.
+1) Implement a function to convert snake_case to camelCase.\n2) Explain unicode word boundaries.\n3) Provide 2 unit tests.
+1) Write a function to compute area under a polyline.\n2) Explain trapezoidal rule.\n3) Add 2 unit tests.
+1) Implement a function to generate all permutations of a list.\n2) Explain recursion depth concerns.\n3) Provide 2 unit tests.
+1) Write a function to remove stopwords from text.\n2) Explain case-folding decisions.\n3) Add 2 unit tests.
+1) Implement a function to compute Jaccard similarity of sets.\n2) Explain use cases.\n3) Provide 2 unit tests.
+1) Write a function to validate a credit card using Luhn.\n2) Explain the algorithm briefly.\n3) Add 3 unit tests.
+1) Implement a function to parse and evaluate simple arithmetic.\n2) Explain operator precedence.\n3) Provide 2 unit tests.
+1) Write a function to find two-sum indices.\n2) Explain hash-map approach.\n3) Add 3 unit tests.
+1) Implement a function to compute rolling standard deviation.\n2) Explain numerical stability.\n3) Provide 2 unit tests.
+1) Write a function to diff two lists (added/removed/common).\n2) Explain complexity.\n3) Add 2 unit tests.
+1) Implement a function to detect palindromic substrings count.\n2) Explain expand-around-center.\n3) Provide 2 unit tests.
+1) Write a function to serialize a tree to list.\n2) Explain traversal order.\n3) Add 2 unit tests.
+1) Implement a function to parse INI file sections.\n2) Explain escaping rules.\n3) Provide 2 unit tests.
+1) Write a function to compute shortest path in an unweighted graph.\n2) Explain BFS usage.\n3) Add 2 unit tests.
+1) Implement a function to compute page ranks for a tiny graph.\n2) Explain damping factor idea.\n3) Provide 2 unit tests.
+1) Write a function to detect duplicates in a 2D grid.\n2) Explain indexing scheme.\n3) Add 2 unit tests.
+1) Implement a function to apply a moving window max.\n2) Explain deque solution.\n3) Provide 2 unit tests.
+1) Write a function to convert roman numerals to int.\n2) Explain subtractive notation.\n3) Add 3 unit tests.
+1) Implement a function to wrap text to a width.\n2) Explain breaking rules.\n3) Provide 2 unit tests.
+1) Write a function to compute mode(s) of a list.\n2) Explain tie handling.\n3) Add 2 unit tests.
+1) Implement a function to remove HTML entities.\n2) Explain mapping/lookup.\n3) Provide 2 unit tests.
+1) Write a function to schedule tasks by priority.\n2) Explain heap usage.\n3) Add 2 unit tests.
+1) Implement a function to compute edit script between strings.\n2) Explain operations tracked.\n3) Provide 2 unit tests.
+1) Write a function to generate n unique random ints in range.\n2) Explain collision avoidance.\n3) Add 2 unit tests.
+1) Implement a function to normalize file paths.\n2) Explain dot-dot resolution.\n3) Provide 2 unit tests.
+1) Write a function to count vowels and consonants.\n2) Explain unicode considerations.\n3) Add 2 unit tests.
+1) Implement a function to format numbers with thousand separators.\n2) Explain locale issues.\n3) Provide 2 unit tests.
+1) Write a function to compute harmonic mean.\n2) Explain when it’s appropriate.\n3) Add 2 unit tests.
+1) Implement a function to zip two iterables unevenly.\n2) Explain fill values.\n3) Provide 2 unit tests.
+1) Write a function to detect monotonic arrays.\n2) Explain single pass solution.\n3) Add 2 unit tests.
+1) Implement a function to convert hex color to RGB.\n2) Explain validation.\n3) Provide 2 unit tests.
+1) Write a function to strip duplicate spaces and trim.\n2) Explain linear pass logic.\n3) Add 2 unit tests.
+1) Implement a function to parse simple markdown headers.\n2) Explain regex approach.\n3) Provide 2 unit tests.
+1) Write a function to compute intersection of intervals.\n2) Explain sorting strategy.\n3) Add 2 unit tests.
+1) Implement a function to simulate a basic queue with two stacks.\n2) Explain amortized analysis.\n3) Provide 2 unit tests.
+1) Write a function to find majority element if any.\n2) Explain Boyer–Moore.\n3) Add 2 unit tests.
+1) Implement a function to count set bits in an integer.\n2) Explain Brian Kernighan’s trick.\n3) Provide 3 unit tests.
+1) Write a function to round floats to banker's rounding.\n2) Explain ties-to-even.\n3) Add 2 unit tests.
+1) Implement a function to compute cumulative max of a list.\n2) Explain usage scenarios.\n3) Provide 2 unit tests.
+1) Write a function to parse query strings to dict.\n2) Explain repeated keys handling.\n3) Add 2 unit tests.
+1) Implement a function to find longest increasing subsequence length.\n2) Explain patience sorting idea.\n3) Provide 2 unit tests.
+1) Write a function to detect near-duplicates by edit distance 1.\n2) Explain pruning strategy.\n3) Add 2 unit tests.
+1) Implement a function to mask emails in text.\n2) Explain privacy tradeoffs.\n3) Provide 2 unit tests.
+1) Write a function to compute running min and max.\n2) Explain memory vs speed tradeoffs.\n3) Add 2 unit tests.
+1) Implement a function to decompress run-length encoding.\n2) Explain error checks.\n3) Provide 2 unit tests.
+1) Write a function to tokenize CSV lines with quotes.\n2) Explain tricky cases.\n3) Add 2 unit tests.
+1) Implement a function to format bytes as human-readable.\n2) Explain units and rounding.\n3) Provide 2 unit tests.
+1) Write a function to detect isomorphism of two strings.\n2) Explain mapping validation.\n3) Add 2 unit tests.
+1) Implement a function to compute simple moving correlation.\n2) Explain normalization.\n3) Provide 2 unit tests.
+1) Write a function to find the first non-repeating char.\n2) Explain counting vs order.\n3) Add 2 unit tests.
+1) Implement a function to paginate a list.\n2) Explain boundary behavior.\n3) Provide 2 unit tests.
+1) Write a function to compute Kendall tau for two rankings.\n2) Explain interpretation.\n3) Add 2 unit tests.
+1) Implement a function to generate Gray code of n bits.\n2) Explain construction rule.\n3) Provide 2 unit tests.

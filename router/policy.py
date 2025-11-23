@@ -3,6 +3,7 @@
 # =============================
 from __future__ import annotations
 
+import os
 import random
 import threading
 from typing import List
@@ -10,7 +11,6 @@ from typing import List
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
 
 # ────────────────────────────────────────────────────────────
 # Simple epsilon-greedy baseline (kept for ablations)
@@ -24,7 +24,7 @@ class EpsilonGreedyPolicy:
     def select(self, obs: List[List[float]]) -> int:
         if random.random() < self.epsilon:
             return random.randrange(len(obs))
-        # score = mean + 0.5 * p95 + 0.1 * queue
+        # score = mean + 0.5 * p95 + 0.1 * queue  (use the per-backend features)
         scores = [o[0] + 0.5 * o[1] + 0.1 * o[2] for o in obs]
         return int(min(range(len(scores)), key=lambda i: scores[i]))
 
@@ -57,37 +57,51 @@ class PPOPolicy:
     def __init__(
         self,
         n_slots: int = 16,
-        obs_dim: int = 6,         # pooled features size (min/mean for mean,p95,queue)
+        obs_dim: int = 6,         # default; will adjust dynamically
         lr: float = 3e-4,
         clip: float = 0.2,
         gamma: float = 0.99,
         lam: float = 0.95,
-        update_every: int = 512,
-        minibatch: int = 128,
+        update_every: int = 128,
+        minibatch: int = 64,
         epochs: int = 4,
     ):
+        # hyperparams
         self.n_slots = n_slots
         self.obs_dim = obs_dim
         self.gamma = gamma
         self.lam = lam
         self.clip = clip
-        self.update_every = update_every
+        # allow override via env (compose sets UPDATE_EVERY optionally)
+        env_update = os.getenv("UPDATE_EVERY")
+        self.update_every = int(env_update) if env_update else update_every
         self.minibatch = minibatch
         self.epochs = epochs
 
+        # model/opt
         self.model = MLP(obs_dim, n_slots)
         self.opt = torch.optim.Adam(self.model.parameters(), lr=lr)
 
-        # Trajectory buffers
+        # online trajectory buffers
         self.obs_buf: List[List[float]] = []
         self.act_buf: List[int] = []
         self.logp_buf: List[float] = []
         self.val_buf: List[float] = []
         self.rew_buf: List[float] = []
 
-        # Concurrency control
+        # concurrency + persistence
         self._lock = threading.Lock()
-        self._updating = False   # prevent re-entrant/parallel updates
+        self._updating = False
+        self._updates = 0
+        self._ckpt_path = os.getenv("CHECKPOINT_PATH", "/app/checkpoints/ppo.pt")
+        self._save_every = int(os.getenv("SAVE_EVERY_UPDATES", "0"))
+
+        # optional Prometheus counter (safe if client not present)
+        try:
+            from prometheus_client import Counter
+            self._ppo_updates_ctr = Counter("ppo_updates_total", "Total PPO parameter updates")
+        except Exception:
+            self._ppo_updates_ctr = None
 
     # ---------- helpers ----------
     def _mask_logits(self, logits: torch.Tensor, valid_n: int) -> torch.Tensor:
@@ -98,13 +112,23 @@ class PPOPolicy:
         return logits
 
     def _pool_obs(self, obs: List[List[float]]) -> torch.Tensor:
-        # obs[i] = [mean, p95, q]
-        arr = torch.tensor(obs, dtype=torch.float32)
-        pooled = torch.stack([
-            arr[:, 0].min(),  arr[:, 1].min(),  arr[:, 2].min(),
-            arr[:, 0].mean(), arr[:, 1].mean(), arr[:, 2].mean(),
-        ])
-        return pooled.unsqueeze(0)  # (1, 6)
+        """
+        obs is per-backend rows:
+          [mean, p95, queue, one_hot_step...]
+        We want a single state vector:
+          [min(mean,p95,queue), mean(mean,p95,queue)] + one_hot_step
+        IMPORTANT: We do NOT pool the one-hot tag; we copy it through directly.
+        """
+        arr = torch.tensor(obs, dtype=torch.float32)  # (n_backends, obs_dim)
+        base = arr[:, :3]  # mean, p95, queue
+        mins = base.min(dim=0).values  # (3,)
+        means = base.mean(dim=0)  # (3,)
+
+        # Pool extra columns (one-hot + context) by mean so they pass through
+        extras = arr[:, 3:].mean(dim=0) if arr.shape[1] > 3 else torch.empty(0)
+
+        pooled = torch.cat([mins, means, extras])  # (6 + extras_dim,)
+        return pooled.unsqueeze(0)  # (1, 6 + extras_dim)
 
     def _align_buffers_locked(self):
         mn = min(len(self.obs_buf), len(self.act_buf), len(self.logp_buf),
@@ -121,10 +145,11 @@ class PPOPolicy:
         valid_n = valid_n or len(obs)
         pooled = self._pool_obs(obs)
 
-        # Ensure model input dim matches pooled size
+        # adapt model input dim if step-tag one-hot changed
         if self.obs_dim != pooled.shape[-1]:
             self.obs_dim = pooled.shape[-1]
             self.model = MLP(self.obs_dim, self.n_slots)
+            # keep same LR as before
             self.opt = torch.optim.Adam(self.model.parameters(), lr=self.opt.param_groups[0]['lr'])
 
         logits, value = self.model(pooled)
@@ -201,3 +226,36 @@ class PPOPolicy:
                 loss.backward()
                 nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
                 self.opt.step()
+
+        # bookkeeping + persistence
+        self._updates += 1
+        if self._ppo_updates_ctr is not None:
+            try:
+                self._ppo_updates_ctr.inc()
+            except Exception:
+                pass
+        if self._save_every > 0 and (self._updates % self._save_every == 0):
+            try:
+                self.save(self._ckpt_path)
+                print(f"[policy] Saved checkpoint to {self._ckpt_path} (update {self._updates})")
+            except Exception as e:
+                print(f"[policy] Save failed: {e}")
+
+    # ---------- persistence ----------
+    def save(self, path: str):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        torch.save({
+            "model": self.model.state_dict(),
+            "opt": self.opt.state_dict(),
+            "obs_dim": self.obs_dim,
+            "n_slots": self.n_slots,
+        }, path)
+
+    def load(self, path: str):
+        ckpt = torch.load(path, map_location="cpu")
+        self.obs_dim = ckpt.get("obs_dim", self.obs_dim)
+        self.n_slots = ckpt.get("n_slots", self.n_slots)
+        self.model = MLP(self.obs_dim, self.n_slots)
+        self.opt = torch.optim.Adam(self.model.parameters(), lr=self.opt.param_groups[0]['lr'])
+        self.model.load_state_dict(ckpt["model"])
+        self.opt.load_state_dict(ckpt["opt"])

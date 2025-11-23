@@ -1,0 +1,100 @@
+Explain why plants are essential for life.
+Out of the following, which statement is most relevant to the current situation?
+Describe how a web page is structured.
+Give two tips for consuming more vegetables.
+Describe the character of Romeo from Romeo and Juliet.
+Generate a list of out-of-the-box anniversary gift ideas for a couple.
+Compare two approaches and state advantages and disadvantages of each one.
+Generate a timeline for the US in the 20th century.
+What factors should someone consider before adopting a pet?
+Generate a new hook for a pop song
+Summarize the changing economic situation in the U.S.
+Explain the concept of exponential growth.
+Provide an example of how natural language processing can be used.
+Generate a scenario where the following dialogue would occur:
+Given the following sentence, generate a new sentence that keeps its original meaning.
+Generate a unique and creative way to ask someone to go on a date.
+Write a description of a person's first job.
+State the purpose of each of the following computer components: RAM, CPU, and Hard Drive.
+Create a word analogy for the word ‘bad’
+Write a letter to your local senator expressing your opinion on gun control laws.
+You are given a news article, summarize it in one sentence.
+Write a question that can be used in a quiz to test knowledge of English grammar.
+Generate a piece of free verse poetry about nature.
+Describe an example of an external conflict in one sentence.
+Develop a simple marketing plan using the provided information.
+Rearrange the following English phrase into Spanish: "We need to practice more."
+Name three types of jobs in the healthcare field
+Create a website that encourages people to adopt pets.
+How do I cook a perfect poached egg?
+Output the result of 18 divided by 7
+Analyze the answer to the following quiz question and provide a justification for the correctness/incorrectness of the answer.
+Generate a catchy slogan for an apparel company.
+Name three things that make a dinner party memorable.
+Given some information about a movie, rate it out of 10.
+Edit the following text for grammatical mistakes
+Determine the perimeter of triangle ABC where A is at (1,1), B at (5,6) and C at (9,2).
+Generate a marketing slogan for a newly launched vitamin supplement.
+Calculate the population density of Spain.
+What is the latest news about the President?
+Generate a list of 3 new trends in the given industry.
+Transform the statement into an interrogative that is at least 5 words long.
+Explain why light travels faster than sound.
+Develop a plan for an online course.
+Tell me the history of the internet.
+What are the features that makes artificial intelligence reliable?
+Write a question that asks for personal information.
+Generate a proverb about finding one's path in life.
+Compare and contrast databases and search engines.
+Translate the following sentence from Spanish to English: "Esta es mi casa."
+Give me a summary of the input text.
+Find the meaning of the phrase "a penny for your thoughts"
+Explain the process of DNA replication.
+How can we estimate the time complexity of an algorithm?
+Determine if the given equation is a linear equation
+Describe in a few sentences about the solar system.
+Write a review for a customer about a product.
+Describe ways in which artificial intelligence could be used to help people.
+Can you provide some information on the symptoms of the coronavirus?
+Identify one challenge with using AI
+Rate the following restaurant on a scale from 1 to 10 where 10 is the highest.
+Generate two examples for a given adjective.
+Describe the human ear and its anatomy.
+Name three novels written by Harper Lee.
+Create a report comparing the human rights record of France and Germany.
+Rewrite the proverb in a modern context.
+Translates the sentence from German to English.
+Find a synonym for the phrase "scared witless".
+Explain the concept of Mitochondrial Eve.
+Edit this sentence to make it logically sound: The organization whose its aim was to eliminate poverty was successful.
+Add appropriate punctuation to the sentence given below.
+Name a natural resource that is highly abundant in the United States.
+Teach me how to bake a chocolate cake.
+What is the difference between k-means and hierarchical clustering?
+Choose which of the following two categories best describes the given item.
+Create a bird species profile
+Generate a set of instructions for making a sandwich
+Rewrite the sentence without using the phrase "in order to".
+Generate a creative story about a character who lives in a village with a secret.
+You are given a computer programming language, and you need to come up with an example program to demonstrate it.
+Take the following statement, and create an imperative instruction that a GPT model can complete.
+Create a positive spin to the following statement: "The federal government is considering the possibility of canceling the summer internships."
+Join the two sentences together using the correct punctuation.
+Provide a creative idea to communicate a new product
+Describe what happened on the day of the Conexión Amor protest.
+Rewrite the following paragraph adding adjectives and adverbs.
+List five virtues that the given person possess.
+What are the common challenges when implementing DevOps in an organization?
+Generate a good answer to the given question.
+Separate the sentences with commas and output the corrected version.
+Describe what a computer virus is.
+Assign the word 'Proficient' the appropriate synonyms for each given sentence.
+Analyze the given argument and identify the premises and conclusion.
+Complete the poem by writing a haiku.
+Create a sentence in Simple Present and another sentence in Simple Past using the verb 'walk'.
+Create a step-by-step guide to implementing the following task.
+Construct a valid argument for why learning should never stop
+Decide if the following sentence is a cause and effect sentence.
+Paraphrase this sentence: "The grass is always greener on the other side"
+Assign the boolean value True or False to the statement below.
+Compare the climate of two regions in the US (e.g. the Midwest and the Northeast).

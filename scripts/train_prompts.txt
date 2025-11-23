@@ -1,0 +1,923 @@
+1) Write a Python function reverse_string(s) that returns the reversed string. (Constraint: use slicing)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write a Python function reverse_string(s) that returns the reversed string. (Constraint: use a loop)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement is_anagram(a, b) that returns True if a and b are anagrams (letters only, ignore case and spaces). (Constraint: use Counter)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement is_anagram(a, b) that returns True if a and b are anagrams (letters only, ignore case and spaces). (Constraint: use sorting)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write is_palindrome_ignore(s) returning True if s is a palindrome ignoring spaces, punctuation, and case. (Constraint: regex normalize)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Write is_palindrome_ignore(s) returning True if s is a palindrome ignoring spaces, punctuation, and case. (Constraint: two-pointer)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement longest_common_prefix(words) returning the longest prefix shared by all strings. (Constraint: vertical scan)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement longest_common_prefix(words) returning the longest prefix shared by all strings. (Constraint: zip(*) trick)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write word_count(s) returning a case-insensitive dict of word→count (strip punctuation). (Constraint: regex tokens)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write word_count(s) returning a case-insensitive dict of word→count (strip punctuation). (Constraint: split on whitespace)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement two_sum(nums, target) returning indices of two numbers that add to target; assume one solution. (Constraint: hashmap)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement two_sum(nums, target) returning indices of two numbers that add to target; assume one solution. (Constraint: sorted indices)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Write move_zeroes(nums) in-place to move all 0s to the end while preserving order. (Constraint: two-pointer)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write move_zeroes(nums) in-place to move all 0s to the end while preserving order. (Constraint: stable, no extra array)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement product_except_self(nums) without division. (Constraint: O(1) extra space)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement product_except_self(nums) without division. (Constraint: explicit prefix/suffix arrays)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write rotate_left(arr, k) that rotates the list left by k positions in O(n). (Constraint: triple-reverse)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Write rotate_left(arr, k) that rotates the list left by k positions in O(n). (Constraint: slicing)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement binary_search(arr, x) returning index in sorted arr or -1. (Constraint: iterative)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement binary_search(arr, x) returning index in sorted arr or -1. (Constraint: recursive)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write is_prime(n) using trial division up to sqrt(n). (Constraint: early exits for small n)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write is_prime(n) using trial division up to sqrt(n). (Constraint: skip evens, handle n<=1)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement gcd(a, b) with Euclid’s algorithm and lcm(a, b) using gcd. (Constraint: iterative)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement gcd(a, b) with Euclid’s algorithm and lcm(a, b) using gcd. (Constraint: recursive)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Write fibonacci(n) iterative O(1) space. (Constraint: classic loop)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement factorial(n) iteratively; return 1 for n=0. (Constraint: negative n invalid)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write roman_to_int(s) and int_to_roman(n). (Constraint: subtractive pairs)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement is_valid_parentheses(s) for (), {}, []. (Constraint: stack)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement decode_string(s) with k[encoded], supports nesting like 3[a2[c]]. (Constraint: stack for counts/substrings)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Create simplify_path(path) for Unix-style paths. (Constraint: stack for .. and .)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement parse_csv_line(line) handling quotes and commas. (Constraint: finite-state parsing)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write slugify(s) converting to lowercase and hyphens; remove disallowed chars. (Constraint: collapse repeats)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement MinStack: push, pop, top, get_min in O(1). (Constraint: two stacks)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement LRUCache(capacity) with get/put in O(1). (Constraint: hashmap + doubly linked list)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement a queue using two stacks (amortized O(1)). (Constraint: lazy transfer)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement a simple Trie with insert, search, startsWith. (Constraint: dict children)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement Disjoint Set Union with path compression + union by rank. (Constraint: union by size or rank)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write shortest_path_grid(grid, start, goal) using BFS (4-neighbor). (Constraint: return length)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement num_islands(grid) counting connected components of 1s (4-direction). (Constraint: DFS)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write topological_sort(graph) or report cycle if not DAG. (Constraint: Kahn’s algorithm)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement dijkstra(graph, src) for non-negative weights. (Constraint: min-heap)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement bellman_ford(graph, src) and detect negative cycles. (Constraint: edge list)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write coin_change_min(coins, amount) returning min coins or -1. (Constraint: bottom-up DP)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement length_of_LIS(nums) in O(n log n). (Constraint: tails + binary search)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write max_subarray_sum(nums) via Kadane’s algorithm. (Constraint: return max sum)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Implement levenshtein(a, b) edit distance. (Constraint: classic DP table)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement min_window_substring(s, t). (Constraint: sliding window + counts)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Write atoi_robust(s) handling sign, whitespace, and 32-bit overflow. (Constraint: clamp bounds)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering edge cases, typical cases, and a stress case.
+
+1) Implement valid_ip(s) returning 'IPv4', 'IPv6', or 'Neither'. (Constraint: strict validation rules)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests, including boundary conditions.
+
+1) Write can_book(existing, new_interval) rejecting overlaps. (Constraint: half-open intervals)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on tricky inputs.
+
+1) Implement merge_two_sorted_lists(a, b) that merges and returns a sorted list. (Constraint: two-pointer merge)
+2) Explain the approach, key invariants, and complexities.
+3) Write 3 unit tests covering equal, disjoint, and overlapping ranges.
+
+1) Write insertion_sort(xs) using in-place shifting. (Constraint: inner loop swap)
+2) Describe why the method works and analyze time/space.
+3) Provide 3 unit tests including already-sorted and reverse-sorted lists.
+
+1) Implement selection_sort(xs) that returns a sorted copy. (Constraint: select min each pass)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on duplicates and negatives.
+
+1) Write bubble_sort(xs) with early-exit optimization. (Constraint: swap flag)
+2) Explain the approach, key invariants, and complexities.
+3) Provide 3 unit tests including no-swap case.
+
+1) Implement quicksort(xs) recursively. (Constraint: random pivot)
+2) Summarize the algorithm choices and trade-offs.
+3) Add 3 unit tests focusing on duplicates and single element.
+
+1) Write mergesort(xs) returning a sorted list. (Constraint: divide and merge)
+2) Explain recursion and merge logic.
+3) Provide 3 unit tests including empty input.
+
+1) Implement heap_sort(xs). (Constraint: heapq)
+2) Describe why the method works and analyze time/space.
+3) Write 3 unit tests for mixed positive/negative numbers.
+
+1) Write top_k_elements(nums, k). (Constraint: min-heap)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 unit tests for edge sizes.
+
+1) Implement kth_smallest(nums, k). (Constraint: quickselect)
+2) Explain average vs worst-case complexity.
+3) Provide 3 unit tests including duplicates.
+
+1) Write count_bits(n) returning binary 1-bits. (Constraint: bit-wise ops)
+2) Explain shift and mask logic.
+3) Add 3 tests including n=0.
+
+1) Implement power_of_two(n) checking if n is a power of 2. (Constraint: bit-trick)
+2) Explain n&(n-1)==0 reasoning.
+3) Provide 3 tests including negatives.
+
+1) Write int_to_binary(n). (Constraint: recursion)
+2) Explain base case and concatenation order.
+3) Add 3 unit tests.
+
+1) Implement binary_to_int(bstr). (Constraint: positional weights)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests including invalid input.
+
+1) Write factorial_recursive(n). (Constraint: recursion base case)
+2) Explain why recursion depth grows with n.
+3) Provide 3 unit tests including n=0.
+
+1) Implement sum_digits(n). (Constraint: integer division)
+2) Describe the approach and analyze time.
+3) Add 3 unit tests for multi-digit numbers.
+
+1) Write digital_root(n). (Constraint: recursive digit sum)
+2) Explain convergence property.
+3) Provide 3 unit tests.
+
+1) Implement count_primes(limit). (Constraint: Sieve of Eratosthenes)
+2) Explain complexity and memory trade-off.
+3) Add 3 tests small limits.
+
+1) Write next_prime(n). (Constraint: helper is_prime)
+2) Explain iteration cost.
+3) Provide 3 unit tests.
+
+1) Implement prime_factors(n). (Constraint: trial division)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests including large composite.
+
+1) Write perfect_number(n) checker. (Constraint: divisor sum)
+2) Explain classification of 6 and 28.
+3) Provide 3 unit tests.
+
+1) Implement pascal_row(n). (Constraint: iterative)
+2) Explain combination recurrence.
+3) Add 3 tests for small rows.
+
+1) Write power_set(items). (Constraint: bitmask)
+2) Describe exponential complexity.
+3) Provide 3 tests small lists.
+
+1) Implement subsets_recursive(items). (Constraint: backtracking)
+2) Explain inclusion/exclusion recursion.
+3) Add 3 tests.
+
+1) Write permutations(items). (Constraint: recursion)
+2) Explain swapping method.
+3) Provide 3 tests short lists.
+
+1) Implement combinations(items, k). (Constraint: recursion)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests including edge cases.
+
+1) Write generate_parentheses(n). (Constraint: backtracking)
+2) Explain pruning conditions.
+3) Provide 3 unit tests.
+
+1) Implement sudoku_valid(board). (Constraint: sets)
+2) Explain checking rows, cols, and boxes.
+3) Add 3 tests partial boards.
+
+1) Write sudoku_solver(board). (Constraint: backtracking)
+2) Describe recursion and constraint propagation.
+3) Provide 3 tests small puzzles.
+
+1) Implement n_queens(n). (Constraint: backtracking)
+2) Explain attack-column and diagonal tracking.
+3) Add 3 tests n=4–6.
+
+1) Write knapsack(values, weights, capacity). (Constraint: DP table)
+2) Explain recurrence and complexity.
+3) Provide 3 unit tests.
+
+1) Implement subset_sum(nums, target). (Constraint: DP boolean)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests small cases.
+
+1) Write longest_common_subsequence(a,b). (Constraint: DP 2-D)
+2) Explain relation to edit distance.
+3) Provide 3 tests.
+
+1) Implement matrix_multiply(A,B). (Constraint: nested loops)
+2) Explain index order.
+3) Add 3 tests.
+
+1) Write transpose_matrix(A). (Constraint: zip(*A))
+2) Describe why zip is efficient.
+3) Provide 3 tests.
+
+1) Implement determinant_2x2(A). (Constraint: ad−bc)
+2) Explain geometric meaning.
+3) Add 3 tests.
+
+1) Write csv_to_json(csv_text). (Constraint: split lines)
+2) Explain parsing and nesting.
+3) Provide 3 tests with header.
+
+1) Implement json_to_csv(json_data). (Constraint: writer DictWriter)
+2) Explain flattening lists.
+3) Add 3 tests nested dicts.
+
+1) Write read_file_lines(path). (Constraint: with open)
+2) Describe file handling and closing.
+3) Provide 3 tests using temp files.
+
+1) Implement write_file_lines(path, lines). (Constraint: overwrite)
+2) Explain newline handling.
+3) Add 3 tests verifying file output.
+
+1) Write count_file_words(path). (Constraint: read + split)
+2) Summarize algorithm choices and trade-offs.
+3) Provide 3 tests small files.
+
+1) Implement search_in_file(path, keyword). (Constraint: case-insensitive)
+2) Explain iteration over lines.
+3) Add 3 tests.
+
+1) Write append_to_file(path, text). (Constraint: append mode)
+2) Describe why append avoids truncation.
+3) Provide 3 tests verifying contents.
+
+1) Implement class Rectangle with area() and perimeter(). (Constraint: OOP)
+2) Explain attributes and methods.
+3) Add 3 tests including zero sides.
+
+1) Write class Circle with radius and area(). (Constraint: math.pi)
+2) Explain encapsulation.
+3) Provide 3 tests float radii.
+
+1) Implement class BankAccount with deposit/withdraw/balance. (Constraint: validation)
+2) Describe state management.
+3) Add 3 tests overdraft.
+
+1) Write class Student with __str__ and average(). (Constraint: list of grades)
+2) Explain composition.
+3) Provide 3 tests.
+
+1) Implement class Car with accelerate() and brake(). (Constraint: speed limits)
+2) Explain attribute mutation.
+3) Add 3 tests edge speeds.
+
+1) Write class Logger writing to file. (Constraint: context manager)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests verifying writes.
+
+1) Implement regex_email_validate(s). (Constraint: regex)
+2) Explain pattern components.
+3) Provide 3 tests valid/invalid.
+
+1) Write regex_extract_dates(s). (Constraint: groups YYYY-MM-DD)
+2) Explain capture groups.
+3) Add 3 tests mixed text.
+
+1) Implement regex_find_urls(s). (Constraint: http[s]?://)
+2) Summarize regex design.
+3) Provide 3 tests sample text.
+
+1) Write split_sentences(s). (Constraint: re.split)
+2) Explain punctuation handling.
+3) Add 3 tests quotes.
+
+1) Implement count_json_keys(obj). (Constraint: recursion)
+2) Describe traversal.
+3) Provide 3 tests nested dicts.
+
+1) Write flatten_json(obj). (Constraint: dot-notation keys)
+2) Explain recursion depth.
+3) Add 3 tests.
+
+1) Implement nested_sum(obj). (Constraint: recursive)
+2) Summarize algorithm choices and trade-offs.
+3) Provide 3 tests lists/dicts.
+
+1) Write binary_tree_inorder(root). (Constraint: recursion)
+2) Explain call order.
+3) Add 3 tests.
+
+1) Implement binary_tree_level_order(root). (Constraint: queue)
+2) Explain BFS.
+3) Provide 3 tests.
+
+1) Write graph_dfs(graph, start). (Constraint: stack)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests small graphs.
+
+1) Implement graph_bfs(graph, start). (Constraint: queue)
+2) Explain visitation tracking.
+3) Provide 3 tests.
+
+1) Write top_k_frequent(words, k). (Constraint: Counter)
+2) Describe sorting by frequency.
+3) Add 3 tests ties.
+
+1) Implement sort_dict_by_value(d). (Constraint: lambda item)
+2) Explain sorted() usage.
+3) Provide 3 tests.
+
+1) Write unique_elements(xs). (Constraint: set)
+2) Explain uniqueness semantics.
+3) Add 3 tests duplicates.
+
+1) Implement intersection(a,b). (Constraint: sets)
+2) Describe complexity.
+3) Provide 3 tests disjoint.
+
+1) Write union(a,b). (Constraint: sets)
+2) Explain operation.
+3) Add 3 tests overlap.
+
+1) Implement difference(a,b). (Constraint: sets)
+2) Summarize algorithm choices and trade-offs.
+3) Provide 3 tests.
+
+1) Write symmetric_difference(a,b). (Constraint: sets)
+2) Explain relation to XOR.
+3) Add 3 tests.
+
+1) Implement evaluate_postfix(expr). (Constraint: stack)
+2) Describe token parsing.
+3) Provide 3 tests small expressions.
+
+1) Write infix_to_postfix(expr). (Constraint: Shunting-Yard)
+2) Explain precedence.
+3) Add 3 tests.
+
+1) Implement truth_table(expr). (Constraint: boolean vars)
+2) Explain enumeration of 2ⁿ rows.
+3) Provide 3 tests.
+
+1) Write simulate_dice_rolls(n). (Constraint: random)
+2) Describe RNG seeding.
+3) Add 3 tests for distribution.
+
+1) Implement monte_carlo_pi(samples). (Constraint: random points)
+2) Explain area ratio.
+3) Provide 3 tests small samples.
+
+1) Write estimate_integral(func,a,b,samples). (Constraint: Monte Carlo)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests simple functions.
+
+1) Implement sort_strings_case_insensitive(words). (Constraint: key=str.lower)
+2) Explain stable sorting.
+3) Provide 3 tests.
+
+1) Write filter_even_numbers(nums). (Constraint: list comprehension)
+2) Describe time complexity.
+3) Add 3 tests.
+
+1) Implement map_square(nums). (Constraint: map + lambda)
+2) Explain functional style.
+3) Provide 3 tests.
+
+1) Write reduce_sum(nums). (Constraint: functools.reduce)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests.
+
+1) Implement custom_sort(objects,key_name). (Constraint: lambda attrgetter)
+2) Explain parameterization.
+3) Provide 3 tests dicts.
+
+1) Write merge_dicts(d1,d2). (Constraint: {**d1, **d2})
+2) Describe precedence rules.
+3) Add 3 tests overlaps.
+
+1) Implement count_characters(s). (Constraint: collections.Counter)
+2) Explain frequency computation.
+3) Provide 3 tests unicode.
+
+1) Write most_common_char(s). (Constraint: max with key)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests.
+
+1) Implement levenshtein_ratio(a,b). (Constraint: edit distance normalized)
+2) Explain normalization.
+3) Provide 3 tests.
+
+1) Write cosine_similarity(a,b). (Constraint: dot/norm)
+2) Explain formula.
+3) Add 3 tests small vectors.
+
+1) Implement jaccard_similarity(a,b). (Constraint: set intersection/union)
+2) Describe range 0–1.
+3) Provide 3 tests.
+
+1) Write hamming_distance(a,b). (Constraint: zip)
+2) Explain equal-length requirement.
+3) Add 3 tests.
+
+1) Implement manhattan_distance(p,q). (Constraint: abs diff)
+2) Explain formula.
+3) Provide 3 tests.
+
+1) Write euclidean_distance(p,q). (Constraint: sqrt sumsq)
+2) Describe geometric meaning.
+3) Add 3 tests.
+
+1) Implement normalize_vector(v). (Constraint: divide by norm)
+2) Explain zero-vector handling.
+3) Provide 3 tests.
+
+1) Write angle_between_vectors(a,b). (Constraint: dot/norm arccos)
+2) Summarize algorithm choices and trade-offs.
+3) Add 3 tests small inputs.
+
+1) Implement matrix_identity(n). (Constraint: list comprehension)
+2) Explain diagonal 1s.
+3) Provide 3 tests.
+
+1) Implement linear_regression_fit(X, y) using least squares. (Constraint: normal equations)
+2) Explain how coefficients are computed.
+3) Provide 3 unit tests with small numeric data.
+
+1) Write predict_linear(X, coef). (Constraint: matrix multiply)
+2) Explain vectorization.
+3) Add 3 tests verifying output shape.
+
+1) Implement mean(values). (Constraint: sum/len)
+2) Describe precision issues.
+3) Provide 3 tests empty/non-empty.
+
+1) Write median(values). (Constraint: sorting)
+2) Explain odd/even length handling.
+3) Add 3 unit tests.
+
+1) Implement mode(values). (Constraint: Counter)
+2) Describe tie-breaking.
+3) Provide 3 tests.
+
+1) Write variance(values). (Constraint: two-pass)
+2) Explain sample vs population difference.
+3) Add 3 tests.
+
+1) Implement standard_deviation(values). (Constraint: sqrt variance)
+2) Explain numerical stability.
+3) Provide 3 tests.
+
+1) Write correlation(x,y). (Constraint: covariance)
+2) Describe normalization.
+3) Add 3 tests correlated/uncorrelated.
+
+1) Implement zscore(values). (Constraint: mean/std)
+2) Explain interpretation.
+3) Provide 3 tests.
+
+1) Write normalize_minmax(values). (Constraint: scaling)
+2) Describe range [0,1].
+3) Add 3 tests negative input.
+
+1) Implement softmax(values). (Constraint: exp normalization)
+2) Explain overflow avoidance.
+3) Provide 3 tests small vectors.
+
+1) Write sigmoid(x). (Constraint: math.exp)
+2) Explain saturation behavior.
+3) Add 3 tests boundaries.
+
+1) Implement relu(x). (Constraint: max(0,x))
+2) Describe gradient properties.
+3) Provide 3 tests.
+
+1) Write cross_entropy(y_true,y_pred). (Constraint: log loss)
+2) Explain clipping.
+3) Add 3 tests.
+
+1) Implement argmax(lst). (Constraint: enumerate)
+2) Describe tie-breaking.
+3) Provide 3 tests.
+
+1) Write argmin(lst). (Constraint: enumerate)
+2) Explain behavior.
+3) Add 3 tests.
+
+1) Implement confusion_matrix(y_true,y_pred,labels). (Constraint: nested loops)
+2) Explain layout.
+3) Provide 3 tests small arrays.
+
+1) Write accuracy_score(y_true,y_pred). (Constraint: zip)
+2) Describe correctness count.
+3) Add 3 tests.
+
+1) Implement precision_score(y_true,y_pred,pos_label). (Constraint: TP/(TP+FP))
+2) Explain undefined cases.
+3) Provide 3 tests.
+
+1) Write recall_score(y_true,y_pred,pos_label). (Constraint: TP/(TP+FN))
+2) Describe interpretation.
+3) Add 3 tests.
+
+1) Implement f1_score(precision,recall). (Constraint: harmonic mean)
+2) Explain edge 0 cases.
+3) Provide 3 tests.
+
+1) Write roc_auc_score(y_true, y_scores). (Constraint: rank method)
+2) Explain area computation.
+3) Add 3 tests.
+
+1) Implement confusion_dict(y_true,y_pred). (Constraint: dict counts)
+2) Describe data structure.
+3) Provide 3 tests.
+
+1) Write evaluate_predictions(y_true,y_pred). (Constraint: compute all metrics)
+2) Explain aggregation.
+3) Add 3 tests.
+
+1) Implement random_choice(lst). (Constraint: random.choice)
+2) Describe reproducibility with seed.
+3) Provide 3 tests.
+
+1) Write shuffle_list(lst). (Constraint: random.shuffle)
+2) Explain in-place randomness.
+3) Add 3 tests.
+
+1) Implement sample_without_replacement(lst,k). (Constraint: random.sample)
+2) Describe complexity.
+3) Provide 3 tests.
+
+1) Write weighted_random_choice(items,weights). (Constraint: random.choices)
+2) Explain normalization.
+3) Add 3 tests.
+
+1) Implement split_train_test(data,ratio). (Constraint: random split)
+2) Describe stratification idea.
+3) Provide 3 tests.
+
+1) Write k_fold_split(data,k). (Constraint: slicing)
+2) Explain index grouping.
+3) Add 3 tests small arrays.
+
+1) Implement parse_json_file(path). (Constraint: json.load)
+2) Describe error handling.
+3) Provide 3 tests malformed JSON.
+
+1) Write write_json_file(path,obj). (Constraint: json.dump)
+2) Explain ensure_ascii=False.
+3) Add 3 tests roundtrip.
+
+1) Implement yaml_to_dict(text). (Constraint: yaml.safe_load)
+2) Describe conversion.
+3) Provide 3 tests small YAMLs.
+
+1) Write dict_to_yaml(obj). (Constraint: yaml.safe_dump)
+2) Explain formatting.
+3) Add 3 tests nested.
+
+1) Implement xml_to_dict(text). (Constraint: ElementTree)
+2) Describe recursive parsing.
+3) Provide 3 tests simple XML.
+
+1) Write dict_to_xml(obj). (Constraint: string builder)
+2) Explain attributes vs elements.
+3) Add 3 tests.
+
+1) Implement parse_ini(text). (Constraint: configparser)
+2) Describe section keys.
+3) Provide 3 tests.
+
+1) Write load_csv(path). (Constraint: csv.reader)
+2) Explain newline issues.
+3) Add 3 tests.
+
+1) Implement save_csv(path,rows). (Constraint: csv.writer)
+2) Describe quoting.
+3) Provide 3 tests.
+
+1) Write read_excel(path). (Constraint: pandas)
+2) Explain sheet selection.
+3) Add 3 tests optional.
+
+1) Implement dataframe_summary(df). (Constraint: describe())
+2) Describe output fields.
+3) Provide 3 tests.
+
+1) Write filter_dataframe(df,col,val). (Constraint: boolean mask)
+2) Explain vectorization.
+3) Add 3 tests.
+
+1) Implement groupby_mean(df,col). (Constraint: groupby)
+2) Describe aggregation.
+3) Provide 3 tests.
+
+1) Write sort_dataframe(df,cols). (Constraint: sort_values)
+2) Explain ascending param.
+3) Add 3 tests.
+
+1) Implement merge_dataframes(a,b,on). (Constraint: merge)
+2) Describe join types.
+3) Provide 3 tests.
+
+1) Write pivot_table(df,index,columns,values). (Constraint: pandas pivot)
+2) Explain reshaping.
+3) Add 3 tests.
+
+1) Implement drop_missing(df). (Constraint: dropna)
+2) Describe axis choice.
+3) Provide 3 tests.
+
+1) Write fill_missing(df,value). (Constraint: fillna)
+2) Explain inplace option.
+3) Add 3 tests.
+
+1) Implement remove_duplicates(df). (Constraint: drop_duplicates)
+2) Describe subset param.
+3) Provide 3 tests.
+
+1) Write unique_values(df,col). (Constraint: Series.unique)
+2) Explain memory trade-offs.
+3) Add 3 tests.
+
+1) Implement dataframe_to_json(df). (Constraint: to_json)
+2) Describe orient options.
+3) Provide 3 tests.
+
+1) Write json_to_dataframe(text). (Constraint: pandas.read_json)
+2) Explain flattening.
+3) Add 3 tests.
+
+1) Implement plot_line(x,y). (Constraint: matplotlib)
+2) Describe labeling.
+3) Provide 3 tests no display.
+
+1) Write plot_histogram(data). (Constraint: plt.hist)
+2) Explain bins and density.
+3) Add 3 tests.
+
+1) Implement plot_scatter(x,y). (Constraint: plt.scatter)
+2) Describe axes scaling.
+3) Provide 3 tests.
+
+1) Write plot_bar(categories,values). (Constraint: plt.bar)
+2) Explain color and rotation.
+3) Add 3 tests.
+
+1) Implement save_plot(path). (Constraint: plt.savefig)
+2) Describe file formats.
+3) Provide 3 tests verifying file creation.
+
+1) Write random_matrix(rows,cols). (Constraint: numpy.random)
+2) Explain seed reproducibility.
+3) Add 3 tests.
+
+1) Implement matrix_add(A,B). (Constraint: numpy add)
+2) Describe broadcasting.
+3) Provide 3 tests.
+
+1) Write matrix_dot(A,B). (Constraint: numpy.dot)
+2) Explain shape rules.
+3) Add 3 tests.
+
+1) Implement elementwise_multiply(A,B). (Constraint: numpy *)
+2) Describe performance benefits.
+3) Provide 3 tests.
+
+1) Write inverse_matrix(A). (Constraint: numpy.linalg.inv)
+2) Explain singular check.
+3) Add 3 tests.
+
+1) Implement determinant_matrix(A). (Constraint: numpy.linalg.det)
+2) Describe geometric interpretation.
+3) Provide 3 tests.
+
+1) Write eigen_decomposition(A). (Constraint: numpy.linalg.eig)
+2) Explain eigenvalues/vectors meaning.
+3) Add 3 tests.
+
+1) Implement singular_value_decomposition(A). (Constraint: numpy.linalg.svd)
+2) Describe compression use.
+3) Provide 3 tests.
+
+1) Write linear_system_solve(A,b). (Constraint: numpy.linalg.solve)
+2) Explain exact vs least squares.
+3) Add 3 tests.
+
+1) Implement polynomial_fit(x,y,deg). (Constraint: numpy.polyfit)
+2) Describe residuals.
+3) Provide 3 tests.
+
+1) Write evaluate_polynomial(coefs,x). (Constraint: polyval)
+2) Explain Horner’s rule.
+3) Add 3 tests.
+
+1) Implement moving_average(data,window). (Constraint: convolution)
+2) Describe boundary behavior.
+3) Provide 3 tests.
+
+1) Write exponential_moving_average(data,alpha). (Constraint: recurrence)
+2) Explain smoothing trade-off.
+3) Add 3 tests.
+
+1) Implement time_difference(t1,t2). (Constraint: datetime)
+2) Describe timedelta.
+3) Provide 3 tests.
+
+1) Write current_timestamp(). (Constraint: datetime.now)
+2) Explain time zones.
+3) Add 3 tests.
+
+1) Implement format_date(dt). (Constraint: strftime)
+2) Describe format codes.
+3) Provide 3 tests.
+
+1) Write parse_date(s). (Constraint: strptime)
+2) Explain parsing errors.
+3) Add 3 tests.
+
+1) Implement days_until(date_str). (Constraint: datetime arithmetic)
+2) Describe comparison.
+3) Provide 3 tests.
+
+1) Write countdown(seconds). (Constraint: time.sleep)
+2) Explain blocking vs async.
+3) Add 3 tests short duration.
+
+1) Implement memoize(func). (Constraint: decorator)
+2) Describe caching.
+3) Provide 3 tests repeated calls.
+
+1) Write retry(func, attempts). (Constraint: wrapper)
+2) Explain backoff.
+3) Add 3 tests forced errors.
+
+1) Implement timeout_wrapper(func,limit). (Constraint: signal)
+2) Describe interruption.
+3) Provide 3 tests small jobs.
+
+1) Write benchmark(func,n). (Constraint: time.perf_counter)
+2) Explain average runtime.
+3) Add 3 tests trivial function.
+
+1) Implement profile_function(func). (Constraint: cProfile)
+2) Describe timing granularity.
+3) Provide 3 tests.
+
+1) Write trace_calls(func). (Constraint: decorator)
+2) Explain debugging utility.
+3) Add 3 tests nested calls.
+
+1) Implement logger_setup(name,level). (Constraint: logging)
+2) Describe levels.
+3) Provide 3 tests messages.
+
+1) Write config_from_env(var,default). (Constraint: os.getenv)
+2) Explain environment handling.
+3) Add 3 tests.
+
+1) Implement list_directory(path). (Constraint: os.listdir)
+2) Describe sorting output.
+3) Provide 3 tests.
+
+1) Write create_directory(path). (Constraint: os.makedirs)
+2) Explain exist_ok flag.
+3) Add 3 tests.
+
+1) Implement remove_file(path). (Constraint: os.remove)
+2) Describe errors.
+3) Provide 3 tests.
+
+1) Write copy_file(src,dst). (Constraint: shutil.copy)
+2) Explain metadata preservation.
+3) Add 3 tests.
+
+1) Implement zip_directory(src,dst). (Constraint: shutil.make_archive)
+2) Describe compression.
+3) Provide 3 tests.
+
+1) Write unzip_file(path,dst). (Constraint: zipfile)
+2) Explain extractall.
+3) Add 3 tests.
+
+1) Implement compute_sha256(path). (Constraint: hashlib)
+2) Describe hash reproducibility.
+3) Provide 3 tests.
+
+1) Write verify_file_hash(path,expected). (Constraint: hashlib)
+2) Explain security use.
+3) Add 3 tests.

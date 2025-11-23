@@ -1,0 +1,2 @@
+Implement the following Python function:
+def prime_length(string):

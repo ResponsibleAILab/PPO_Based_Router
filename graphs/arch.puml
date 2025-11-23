@@ -1,0 +1,83 @@
+@startuml
+skinparam dpi 180
+skinparam shadowing false
+skinparam defaultFontName Inter
+skinparam packageStyle rectangle
+skinparam roundcorner 12
+skinparam ArrowThickness 1.3
+skinparam ArrowColor #111111
+skinparam linetype ortho
+skinparam rectangleBorderColor #222222
+skinparam packageBorderColor #333333
+skinparam packageTitleFontColor #222222
+skinparam noteBorderColor #888888
+skinparam noteBackgroundColor #FFFDF7
+
+legend left
+  == Legend ==
+  <b>Solid black arrows</b>: Inference / data path
+  <b>Dashed blue arrows</b>: Control / metrics path
+endlegend
+
+actor "Client / User\n(or Locust Load Gen)" as CLIENT
+
+package "Docker Compose Network" as DOCKER {
+  rectangle "RL Router\n(FastAPI + PPO Policy)\n— exposes: /infer, /health, /metrics" as RL #White
+  note right of RL
+    PPO policy (learns online)\n
+    Observations: per-backend mean latency, p95, queue proxy\n    Action: select backend A/B/C\n    Reward: –latency (extensible with quality/cost)
+  end note
+
+  package "MCP LLM Backends" as MCP {
+    rectangle "mcp_a\nAdapter → Ollama model: Mistral\n— exposes: /infer" as MCP_A
+    rectangle "mcp_b\nAdapter → Ollama model: Llama 3\n— exposes: /infer" as MCP_B
+    rectangle "mcp_c\nAdapter → Ollama model: CodeLlama\n— exposes: /infer" as MCP_C
+  }
+
+  rectangle "Ollama Model Server\n(hosts/serves real LLMs)" as OLLAMA
+
+  rectangle "Prometheus\n(scrapes /metrics)" as PROM
+  rectangle "Grafana\n(visualizes Prometheus metrics)" as GRAF
+}
+
+' --- Inference / data flow (solid black) ---
+CLIENT -[#111111]-> RL : POST /infer (task)
+RL -[#111111]-> MCP_A : POST /infer (when A selected)
+RL -[#111111]-> MCP_B : POST /infer (when B selected)
+RL -[#111111]-> MCP_C : POST /infer (when C selected)
+
+MCP_A -[#111111]-> OLLAMA : generate(model=Mistral)
+MCP_B -[#111111]-> OLLAMA : generate(model=Llama3)
+MCP_C -[#111111]-> OLLAMA : generate(model=CodeLlama)
+
+OLLAMA -[#111111]-> MCP_A : completion
+OLLAMA -[#111111]-> MCP_B : completion
+OLLAMA -[#111111]-> MCP_C : completion
+
+MCP_A -[#111111]-> RL : response text
+MCP_B -[#111111]-> RL : response text
+MCP_C -[#111111]-> RL : response text
+
+RL -[#111111]-> CLIENT : response text
+
+' --- Control / metrics flow (dashed blue) ---
+skinparam ArrowColor #1F4B99
+RL ..> PROM : expose /metrics\n(requests, latency histograms, routing counts)
+MCP_A ..> PROM : expose /metrics (optional)
+MCP_B ..> PROM : expose /metrics (optional)
+MCP_C ..> PROM : expose /metrics (optional)
+OLLAMA ..> PROM : expose /metrics (optional)
+PROM ..> GRAF : dashboards / queries
+skinparam ArrowColor #111111
+
+' --- PPO learning loop annotation ---
+rectangle "PPO Loop" as PPO <<loop>> #EEEEFF
+note right of PPO
+  Observation → Action → Reward → Update\n
+  (runs inside RL Router)
+end note
+RL -[dotted,#1F4B99]-> PPO : online training events
+PPO -[dotted,#1F4B99]-> RL : policy update
+
+left to right direction
+@enduml
