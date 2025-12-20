@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse
 from prometheus_client import Counter, Gauge, Histogram, generate_latest, CONTENT_TYPE_LATEST
 
-from policy import EpsilonGreedyPolicy, PPOPolicy
+from policy import EpsilonGreedyPolicy, PPOPolicy, SoftmaxPolicy, UCBPolicy, ThompsonSamplingPolicy
 from metrics import SlidingWindow
 
 # ── Config via env
@@ -101,8 +101,16 @@ INITIAL_OBS_DIM = 6 + len(STEP_TAGS) + 3
 
 if POLICY_KIND == "ppo":
     policy = PPOPolicy(n_slots=N_ACTIONS, obs_dim=INITIAL_OBS_DIM)
-else:
+elif POLICY_KIND == "epsilon":
     policy = EpsilonGreedyPolicy(epsilon=EPSILON)
+elif POLICY_KIND == "softmax":
+    policy = SoftmaxPolicy(temperature=float(os.getenv("SOFTMAX_TAU", "0.1")))
+elif POLICY_KIND == "ucb":
+    policy = UCBPolicy(c=float(os.getenv("UCB_C", "2.0")))
+elif POLICY_KIND in ("thompson", "ts", "thompson_sampling"):
+    policy = ThompsonSamplingPolicy(prior_var=float(os.getenv("TS_PRIOR_VAR", "1.0")))
+else:
+    raise RuntimeError(f"Unknown POLICY '{POLICY_KIND}'")
 
 # Sliding latency windows per logical backend index
 windows: Dict[int, SlidingWindow] = {i: SlidingWindow(WINDOW) for i in range(N_ACTIONS)}
@@ -222,8 +230,16 @@ async def infer(payload: Dict):
     quality = _quality_score(step_tag, prompt_in, out)
     reward = ALPHA * quality - BETA * dt - GAMMA * cost
 
+    # Update learning policy (PPO) or bandit policy
     if POLICY_KIND == "ppo" and hasattr(policy, "observe"):
         policy.observe(reward)
+    elif hasattr(policy, "update"):
+        # bandit-style policies (softmax / ucb / thompson / epsilon)
+        try:
+            policy.update(choice, reward)
+        except TypeError:
+            # in case a policy has a different signature; we ignore gracefully
+            pass
 
     # JSONL log (for analysis/paper)
     rec = {

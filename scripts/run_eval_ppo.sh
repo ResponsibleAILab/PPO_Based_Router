@@ -25,7 +25,7 @@ done
 mkdir -p "$ROOT_DIR/logs"
 
 echo "[PPO] running dataset $PROMPTS_FILE with tag=$TAG"
-MAX_REQUESTS="${MAX_REQUESTS:-0}"  # 0 = no cap, otherwise stop after N lines
+MAX_REQUESTS="${MAX_REQUESTS:-300}"  # 300 default; override via env if needed
 count=0
 while IFS= read -r line || [[ -n "$line" ]]; do
   # Optional cap

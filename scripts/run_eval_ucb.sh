@@ -10,10 +10,22 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROMPTS_FILE="$1"
 TAG="$2"
 
-# Bring up router in epsilon mode
-docker compose -f "$ROOT_DIR/docker-compose.yml" -f "$ROOT_DIR/docker-compose.epsilon.yml" up -d --build rl_router
+LOG_DIR="$ROOT_DIR/logs"
+SRC="$LOG_DIR/route_log_ucb.jsonl"
 
-echo "[EPS] warm-up 3 requests…"
+# Ensure logs dir exists and start from a fresh live log
+mkdir -p "$LOG_DIR"
+if [[ -f "$SRC" ]]; then
+  rm -f "$SRC"
+fi
+
+# Bring up router in UCB mode
+docker compose \
+  -f "$ROOT_DIR/docker-compose.yml" \
+  -f "$ROOT_DIR/docker-compose.ucb.yml" \
+  up -d --build rl_router
+
+echo "[UCB] warm-up 3 requests…"
 for i in 1 2 3; do
   curl -s -X POST http://localhost:8080/infer \
     -H "content-type: application/json" \
@@ -21,11 +33,10 @@ for i in 1 2 3; do
   sleep 0.7
 done
 
-mkdir -p "$ROOT_DIR/logs"
-
-echo "[EPS] running dataset $PROMPTS_FILE with tag=$TAG"
+echo "[UCB] running dataset $PROMPTS_FILE with tag=$TAG"
 MAX_REQUESTS="${MAX_REQUESTS:-300}"  # 300 default; override via env if needed
 count=0
+
 while IFS= read -r line || [[ -n "$line" ]]; do
   # Optional cap
   if [[ "$MAX_REQUESTS" -gt 0 && "$count" -ge "$MAX_REQUESTS" ]]; then
@@ -47,13 +58,11 @@ done < "$PROMPTS_FILE"
 
 # Snapshot router log atomically with timestamp
 TS="$(date +%Y%m%d_%H%M%S)"
-LOG_DIR="$ROOT_DIR/logs"
-SRC="$LOG_DIR/route_log_epsilon.jsonl"          # <-- matches ROUTER_JSONL
-DST="$LOG_DIR/route_log_epsilon_${TAG}_${TS}.jsonl"
+DST="$LOG_DIR/route_log_ucb_${TAG}_${TS}.jsonl"
 
 if [[ -f "$SRC" ]]; then
   cp "$SRC" "$DST"
-  echo "[PPO] saved $DST"
+  echo "[UCB] saved $DST"
 else
   echo "⚠️  $SRC not found — did requests hit the router?"
 fi

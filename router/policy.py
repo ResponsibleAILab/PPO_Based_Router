@@ -1,6 +1,3 @@
-# =============================
-# File: router/policy.py
-# =============================
 from __future__ import annotations
 
 import os
@@ -12,6 +9,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+import math
+
 # ────────────────────────────────────────────────────────────
 # Simple epsilon-greedy baseline (kept for ablations)
 # ────────────────────────────────────────────────────────────
@@ -22,16 +21,149 @@ class EpsilonGreedyPolicy:
         self.buffer = []
 
     def select(self, obs: List[List[float]]) -> int:
+        # obs is per-backend rows: [mean, p95, queue, ...]
         if random.random() < self.epsilon:
             return random.randrange(len(obs))
-        # score = mean + 0.5 * p95 + 0.1 * queue  (use the per-backend features)
+        # score = mean + 0.5 * p95 + 0.1 * queue  (lower is better)
         scores = [o[0] + 0.5 * o[1] + 0.1 * o[2] for o in obs]
         return int(min(range(len(scores)), key=lambda i: scores[i]))
 
+    # old signature kept for backwards compatibility (not used by app.py)
     def observe(self, o, a, r):
         self.buffer.append((o, a, r))
         if len(self.buffer) > 10_000:
             self.buffer = self.buffer[-5_000:]
+
+    # new unified interface for bandit-style updates (no-op for epsilon)
+    def update(self, backend_idx: int, reward: float) -> None:
+        # epsilon-greedy baseline in this project is latency-based, so we
+        # ignore the reward here to keep behavior identical.
+        return
+
+# ────────────────────────────────────────────────────────────
+# Shared bandit base for Softmax / UCB / Thompson Sampling
+# ────────────────────────────────────────────────────────────
+class _BanditStatsBase:
+    """
+    Keeps per-backend running stats of reward.
+    Uses Welford's algorithm for mean / variance.
+    """
+    def __init__(self):
+        self.counts: List[int] = []
+        self.means: List[float] = []
+        self.m2: List[float] = []  # sum of squared diffs
+
+    def _ensure_arms(self, n_arms: int) -> None:
+        while len(self.counts) < n_arms:
+            self.counts.append(0)
+            self.means.append(0.0)
+            self.m2.append(0.0)
+
+    def update(self, backend_idx: int, reward: float) -> None:
+        self._ensure_arms(backend_idx + 1)
+        c = self.counts[backend_idx] + 1
+        mean = self.means[backend_idx]
+        delta = reward - mean
+        mean_new = mean + delta / c
+        delta2 = reward - mean_new
+        m2_new = self.m2[backend_idx] + delta * delta2
+
+        self.counts[backend_idx] = c
+        self.means[backend_idx] = mean_new
+        self.m2[backend_idx] = m2_new
+
+    def _variance(self, backend_idx: int) -> float:
+        c = self.counts[backend_idx]
+        if c < 2:
+            return 1.0
+        return self.m2[backend_idx] / (c - 1)
+
+class SoftmaxPolicy(_BanditStatsBase):
+    """
+    Softmax (Boltzmann) exploration over mean reward.
+    Higher reward backends get higher probability.
+    """
+    def __init__(self, temperature: float = 0.1):
+        super().__init__()
+        self.temperature = temperature
+
+    def select(self, obs: List[List[float]]) -> int:
+        n = len(obs)
+        self._ensure_arms(n)
+
+        # Ensure each arm is tried at least once
+        for i in range(n):
+            if self.counts[i] == 0:
+                return i
+
+        # Compute softmax over mean rewards
+        temps = [m / max(self.temperature, 1e-8) for m in self.means[:n]]
+        max_temp = max(temps)
+        exps = [math.exp(x - max_temp) for x in temps]
+        total = sum(exps)
+        probs = [e / total for e in exps]
+
+        r = random.random()
+        cum = 0.0
+        for i, p in enumerate(probs):
+            cum += p
+            if r <= cum:
+                return i
+        return n - 1  # fallback
+
+class UCBPolicy(_BanditStatsBase):
+    """
+    UCB1-style policy over mean reward.
+    """
+    def __init__(self, c: float = 2.0):
+        super().__init__()
+        self.c = c
+
+    def select(self, obs: List[List[float]]) -> int:
+        n = len(obs)
+        self._ensure_arms(n)
+
+        # Try each arm at least once
+        for i in range(n):
+            if self.counts[i] == 0:
+                return i
+
+        total_counts = sum(self.counts[:n])
+        ucb_vals = []
+        for i in range(n):
+            mean = self.means[i]
+            bonus = self.c * math.sqrt(math.log(total_counts) / self.counts[i])
+            ucb_vals.append(mean + bonus)
+
+        return int(max(range(n), key=lambda i: ucb_vals[i]))
+
+
+class ThompsonSamplingPolicy(_BanditStatsBase):
+    """
+    Thompson Sampling with Gaussian approximation over reward.
+    """
+    def __init__(self, prior_var: float = 1.0):
+        super().__init__()
+        self.prior_var = prior_var
+
+    def select(self, obs: List[List[float]]) -> int:
+        n = len(obs)
+        self._ensure_arms(n)
+
+        samples = []
+        for i in range(n):
+            c = self.counts[i]
+            if c == 0:
+                mean = 0.0
+                var = self.prior_var * 10.0
+            else:
+                mean = self.means[i]
+                # approximate posterior variance
+                var = self._variance(i) / max(c, 1) + self.prior_var
+            std = math.sqrt(max(var, 1e-8))
+            samples.append(random.gauss(mean, std))
+
+        return int(max(range(n), key=lambda i: samples[i]))
 
 
 # ────────────────────────────────────────────────────────────

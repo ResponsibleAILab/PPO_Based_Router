@@ -1,0 +1,13 @@
+services:
+  rl_router:
+    environment:
+      POLICY: "thompson"
+      TS_PRIOR_VAR: "${TS_PRIOR_VAR:-1.0}"
+      ALPHA_QUALITY: "2.5"
+      BETA_LAT: "0.5"
+      GAMMA_COST: "0.002"
+      COSTS_PER_TOKEN: "0.5,1.0,0.7"
+      ROUTER_JSONL: "/app/logs/route_log_thompson.jsonl"
+    volumes:
+      - ./checkpoints:/app/checkpoints:ro
+      - ./logs:/app/logs
