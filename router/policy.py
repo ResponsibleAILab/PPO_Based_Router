@@ -1,3 +1,6 @@
+# =============================
+# File: router/policy.py
+# =============================
 from __future__ import annotations
 
 import os
@@ -11,9 +14,9 @@ import torch.nn.functional as F
 
 import math
 
-# ────────────────────────────────────────────────────────────
+# =============================
 # Simple epsilon-greedy baseline (kept for ablations)
-# ────────────────────────────────────────────────────────────
+# =============================
 class EpsilonGreedyPolicy:
     """Selects backend with lowest latency proxy with epsilon exploration."""
     def __init__(self, epsilon: float = 0.1):
@@ -40,9 +43,10 @@ class EpsilonGreedyPolicy:
         # ignore the reward here to keep behavior identical.
         return
 
-# ────────────────────────────────────────────────────────────
+# ========================================================
 # Shared bandit base for Softmax / UCB / Thompson Sampling
-# ────────────────────────────────────────────────────────────
+# ========================================================
+
 class _BanditStatsBase:
     """
     Keeps per-backend running stats of reward.
@@ -166,10 +170,89 @@ class ThompsonSamplingPolicy(_BanditStatsBase):
         return int(max(range(n), key=lambda i: samples[i]))
 
 
-# ────────────────────────────────────────────────────────────
+class MultiObjectiveUCBPolicy:
+    """
+    Multi-objective UCB policy that tracks reward components separately.
+
+    For each backend, the policy maintains running means for:
+      - quality   (higher is better)
+      - latency   (lower is better)
+      - cost      (lower is better)
+
+    Selection uses an optimistic score:
+
+      score_i = alpha * (q_mean + bonus_q)
+              - beta  * max(0, lat_mean - bonus_l)
+              - gamma * max(0, cost_mean - bonus_c)
+
+    This preserves the paper's multi-objective structure while keeping the
+    bandit itself myopic and lightweight.
+    """
+    def __init__(self, alpha: float = 1.0, beta: float = 1.0, gamma: float = 0.0, c: float = 2.0):
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
+        self.c = c
+        self.counts: List[int] = []
+        self.q_means: List[float] = []
+        self.lat_means: List[float] = []
+        self.cost_means: List[float] = []
+
+    def _ensure_arms(self, n_arms: int) -> None:
+        while len(self.counts) < n_arms:
+            self.counts.append(0)
+            self.q_means.append(0.0)
+            self.lat_means.append(0.0)
+            self.cost_means.append(0.0)
+
+    @staticmethod
+    def _running_mean(prev_mean: float, prev_count: int, x: float) -> float:
+        new_count = prev_count + 1
+        return prev_mean + (x - prev_mean) / max(new_count, 1)
+
+    def update_multi(self, backend_idx: int, quality: float, latency: float, cost: float) -> None:
+        self._ensure_arms(backend_idx + 1)
+        c = self.counts[backend_idx]
+        self.q_means[backend_idx] = self._running_mean(self.q_means[backend_idx], c, float(quality))
+        self.lat_means[backend_idx] = self._running_mean(self.lat_means[backend_idx], c, float(latency))
+        self.cost_means[backend_idx] = self._running_mean(self.cost_means[backend_idx], c, float(cost))
+        self.counts[backend_idx] = c + 1
+
+    def update(self, backend_idx: int, reward: float) -> None:
+        # Intentionally ignored. This policy requires the decomposed objectives
+        # so that quality, latency, and cost remain explicitly visible.
+        return
+
+    def select(self, obs: List[List[float]]) -> int:
+        n = len(obs)
+        self._ensure_arms(n)
+
+        # Ensure each backend is tried at least once.
+        for i in range(n):
+            if self.counts[i] == 0:
+                return i
+
+        total_counts = max(1, sum(self.counts[:n]))
+        scores = []
+        for i in range(n):
+            bonus = self.c * math.sqrt(math.log(total_counts) / max(self.counts[i], 1))
+            optimistic_quality = self.q_means[i] + bonus
+            optimistic_latency = max(0.0, self.lat_means[i] - bonus)
+            optimistic_cost = max(0.0, self.cost_means[i] - bonus)
+            score = (
+                self.alpha * optimistic_quality
+                - self.beta * optimistic_latency
+                - self.gamma * optimistic_cost
+            )
+            scores.append(score)
+
+        return int(max(range(n), key=lambda i: scores[i]))
+
+
+# ===========================================================
 # PPO Policy (CPU) — on-policy updates from live traffic
 # Thread-safe buffers to handle concurrent requests
-# ────────────────────────────────────────────────────────────
+# ===========================================================
 class MLP(nn.Module):
     def __init__(self, obs_dim: int, n_actions: int, hidden: int = 64):
         super().__init__()

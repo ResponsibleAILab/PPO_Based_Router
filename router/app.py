@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse
 from prometheus_client import Counter, Gauge, Histogram, generate_latest, CONTENT_TYPE_LATEST
 
-from policy import EpsilonGreedyPolicy, PPOPolicy, SoftmaxPolicy, UCBPolicy, ThompsonSamplingPolicy
+from policy import EpsilonGreedyPolicy, PPOPolicy, SoftmaxPolicy, UCBPolicy, ThompsonSamplingPolicy, MultiObjectiveUCBPolicy
 from metrics import SlidingWindow
 
 # ── Config via env
@@ -43,6 +43,18 @@ COSTS = [float(x) for x in os.getenv("COSTS_PER_TOKEN", "0.0,0.0,0.0").split(","
 # If ROUTER_JSONL is set, honor it; otherwise auto-name by policy
 _log_env = os.getenv("ROUTER_JSONL")
 LOG_PATH = _log_env if _log_env else f"/app/logs/route_log_{POLICY_NAME}.jsonl"
+
+
+def _reward_components(quality: float, latency_s: float, cost: float) -> Dict[str, float]:
+    quality_term = ALPHA * float(quality)
+    latency_term = BETA * float(latency_s)
+    cost_term = GAMMA * float(cost)
+    return {
+        "quality_term": quality_term,
+        "latency_term": latency_term,
+        "cost_term": cost_term,
+        "reward": quality_term - latency_term - cost_term,
+    }
 
 def _quality_score(step_tag: str | None, prompt: str, result: dict) -> float:
     """Very simple, deterministic heuristics (0..1). Refine later."""
@@ -107,6 +119,13 @@ elif POLICY_KIND == "softmax":
     policy = SoftmaxPolicy(temperature=float(os.getenv("SOFTMAX_TAU", "0.1")))
 elif POLICY_KIND == "ucb":
     policy = UCBPolicy(c=float(os.getenv("UCB_C", "2.0")))
+elif POLICY_KIND in ("moucb", "mo_ucb", "multiobjective_ucb", "multi_objective_ucb", "vector_ucb"):
+    policy = MultiObjectiveUCBPolicy(
+        alpha=ALPHA,
+        beta=BETA,
+        gamma=GAMMA,
+        c=float(os.getenv("MOUCB_C", os.getenv("UCB_C", "2.0"))),
+    )
 elif POLICY_KIND in ("thompson", "ts", "thompson_sampling"):
     policy = ThompsonSamplingPolicy(prior_var=float(os.getenv("TS_PRIOR_VAR", "1.0")))
 else:
@@ -228,11 +247,17 @@ async def infer(payload: Dict):
 
     # Quality + multi-objective reward
     quality = _quality_score(step_tag, prompt_in, out)
-    reward = ALPHA * quality - BETA * dt - GAMMA * cost
+    comps = _reward_components(quality, dt, cost)
+    reward = comps["reward"]
 
     # Update learning policy (PPO) or bandit policy
     if POLICY_KIND == "ppo" and hasattr(policy, "observe"):
         policy.observe(reward)
+    elif hasattr(policy, "update_multi"):
+        try:
+            policy.update_multi(choice, quality, dt, cost)
+        except TypeError:
+            pass
     elif hasattr(policy, "update"):
         # bandit-style policies (softmax / ucb / thompson / epsilon)
         try:
@@ -254,6 +279,13 @@ async def infer(payload: Dict):
         "cost": cost,
         "quality": quality,
         "reward": reward,
+        "reward_quality_term": comps["quality_term"],
+        "reward_latency_term": comps["latency_term"],
+        "reward_cost_term": comps["cost_term"],
+        "alpha_quality": ALPHA,
+        "beta_latency": BETA,
+        "gamma_cost": GAMMA,
+        "cost_per_token": per_token,
         "step_tag": step_tag,
         "step_id": step_id,
         "prompt_len": step_len,

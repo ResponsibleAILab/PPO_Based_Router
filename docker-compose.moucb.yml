@@ -1,0 +1,13 @@
+services:
+  rl_router:
+    environment:
+      POLICY: "moucb"
+      MOUCB_C: "${MOUCB_C:-2.0}"
+      ALPHA_QUALITY: "1.0"
+      BETA_LAT: "1.0"
+      GAMMA_COST: "0.001"
+      COSTS_PER_TOKEN: "0.5,1.0,0.7"
+      ROUTER_JSONL: "/app/logs/route_log_moucb.jsonl"
+    volumes:
+      - ./checkpoints:/app/checkpoints:ro
+      - ./logs:/app/logs
