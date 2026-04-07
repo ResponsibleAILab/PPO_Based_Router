@@ -3,6 +3,9 @@ set -euo pipefail
 
 # Default cap per run; can be overridden by exporting MAX_REQUESTS before calling
 export MAX_REQUESTS="${MAX_REQUESTS:-300}"
+export ALPHA_QUALITY_OVERRIDE="${ALPHA_QUALITY_OVERRIDE:-${ALPHA_QUALITY:-1.0}}"
+export BETA_LAT_OVERRIDE="${BETA_LAT_OVERRIDE:-${BETA_LAT:-1.0}}"
+export GAMMA_COST_OVERRIDE="${GAMMA_COST_OVERRIDE:-${GAMMA_COST:-0.001}}"
 
 # Root of the project (one level above scripts/)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -15,7 +18,8 @@ PROMPTS=( "code_prompts.txt" "explain_prompts.txt" "tests_prompts.txt" )
 TAGS=(    "code"            "explain"             "tests"            )
 
 # Only run these three methods – PPO/epsilon handled elsewhere
-METHODS=( "softmax" "ucb" "thompson" )
+METHODS=( "epsilon" "ppo" "softmax" "ucb" "thompson" "moucb" )
+#METHODS=( "moucb" )
 
 # Name of the Ollama container (from docker ps)
 OLLAMA_CONTAINER="rl_mcp_project-ollama-1"
@@ -26,6 +30,7 @@ echo "Project root: $ROOT_DIR"
 echo "Datasets dir: $DATA_DIR"
 echo "Methods: ${METHODS[*]}"
 echo "Datasets: ${PROMPTS[*]}"
+echo "Reward weights: alpha=${ALPHA_QUALITY_OVERRIDE} beta=${BETA_LAT_OVERRIDE} gamma=${GAMMA_COST_OVERRIDE}"
 echo
 
 check_router_policy() {
@@ -171,4 +176,4 @@ for METHOD in "${METHODS[@]}"; do
   echo
 done
 
-echo "🎉 All methods (softmax, ucb, thompson) completed across all datasets."
+echo "🎉 All methods completed across all datasets."

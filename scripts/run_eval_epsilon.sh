@@ -9,9 +9,14 @@ fi
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROMPTS_FILE="$1"
 TAG="$2"
+LOG_LABEL="${LOG_LABEL:-}"
 
 # Bring up router in epsilon mode
 docker compose -f "$ROOT_DIR/docker-compose.yml" -f "$ROOT_DIR/docker-compose.epsilon.yml" up -d --build rl_router
+
+echo "[EPS] reward config:"
+curl -s http://localhost:8080/health || true
+echo
 
 echo "[EPS] warm-up 3 requests…"
 for i in 1 2 3; do
@@ -49,7 +54,11 @@ done < "$PROMPTS_FILE"
 TS="$(date +%Y%m%d_%H%M%S)"
 LOG_DIR="$ROOT_DIR/logs"
 SRC="$LOG_DIR/route_log_epsilon.jsonl"          # <-- matches ROUTER_JSONL
-DST="$LOG_DIR/route_log_epsilon_${TAG}_${TS}.jsonl"
+if [[ -n "$LOG_LABEL" ]]; then
+  DST="$LOG_DIR/route_log_epsilon_${TAG}_${LOG_LABEL}_${TS}.jsonl"
+else
+  DST="$LOG_DIR/route_log_epsilon_${TAG}_${TS}.jsonl"
+fi
 
 if [[ -f "$SRC" ]]; then
   cp "$SRC" "$DST"

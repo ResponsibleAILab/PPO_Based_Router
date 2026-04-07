@@ -1,0 +1,134 @@
+2) What’s next (now that the pipeline works)
+
+Here’s a crisp, practical roadmap to turn this into publishable experiments:
+
+A. Lock down baselines
+
+Keep two router variants:
+
+Baseline: POLICY=epsilon (epsilon-greedy).
+
+RL: POLICY=ppo (your current setup).
+
+Save/restore PPO:
+
+# Save (after training traffic)
+curl -s -X POST http://localhost:8080/policy/save | jq .
+# Load (on fresh start)
+curl -s -X POST http://localhost:8080/policy/load | jq .
+
+
+Check that logs/route_log.jsonl is filling with { step_tag, backend, latency_s, quality, cost, reward }.
+
+B. Train with traffic
+
+Quick synthetic load (already have Locust). Or fire real prompts via planner:
+
+# cook up a loop of mixed tasks
+for i in {1..50}; do
+  curl -s -X POST http://localhost:9000/plan_run \
+    -H "content-type: application/json" \
+    -d '{"prompt":"1) Write a Python function to reverse a list.\n2) Explain it.\n3) Create 2 unit tests.","max_new_tokens":120}' >/dev/null
+done
+
+
+PPO will update automatically as requests flow, and (with your env) save a checkpoint on each update.
+
+C. Verify it’s splitting and routing as intended
+
+The planner’s /plan_run response shows steps[].type and steps[].chosen_backend. That’s your per-step, per-LLM proof.
+
+For a quick summary without Grafana:
+
+jq -r 'select(.step_tag!=null) | "\(.step_tag)\t\(.backend)"' logs/route_log.jsonl | sort | uniq -c
+
+
+You should see different backends preferred for code vs explain vs tests as training progresses.
+
+D. Evaluate on datasets (repeatable experiments)
+
+Use simple, public-ish sets to generate prompts by type:
+
+Code: small functions/katas (reverse list, factorial, fizzbuzz, parse csv…).
+
+Explain: short explanatory questions.
+
+Tests: generate unit tests for a given function.
+
+Script 3 runs per dataset:
+
+Static mapping (e.g., always LLM-B for everything).
+
+Epsilon-greedy baseline.
+
+PPO policy.
+
+Compare:
+
+p50/p95 latency, token cost.
+
+Quality proxy (your _quality_score).
+
+Overall reward (αquality − βlatency − γ*cost).
+
+E. Tune rewards (multi-objective)
+
+Adjust ALPHA_QUALITY, BETA_LAT, GAMMA_COST to reflect your goal (speed vs quality vs cost).
+
+If you want better quality signals:
+
+For tests: run the emitted tests against the generated code (tiny Python sandbox) and reward pass-rate.
+
+For code: attempt to exec/lint (flake8, ast parse) → binary reward.
+
+For explain: length + structure (e.g., bullet count, readability heuristic).
+
+F. Report & ablations
+
+Show routing distributions over time, latency reduction, reward gains vs the baseline.
+
+Ablate features:
+
+No step one-hot (just perf features).
+
+No context features.
+
+No quality term (latency-only).
+
+Include 95% CIs for metrics across runs.
+
+Handy commands cheat-sheet
+
+Bring everything up (fresh)
+
+docker compose down -v
+docker compose up -d --build
+
+
+Smoke tests
+
+curl -s http://localhost:11434/api/tags | jq .
+curl -s http://localhost:8080/health | jq .
+curl -s http://localhost:9000/health | jq .
+
+# Router single step
+curl -s -X POST http://localhost:8080/infer \
+  -H "content-type: application/json" \
+  -d '{"prompt":"What is lift vs drag?","max_new_tokens":64,"step_tag":"explain"}' | jq .
+
+# Planner multi-step
+curl -s -X POST http://localhost:9000/plan_run \
+  -H "content-type: application/json" \
+  -d '{"prompt":"1) Write a Python function to reverse a list.\n2) Explain how it works.\n3) Create 2 unit tests.","max_new_tokens":120}' | jq .
+
+
+Checkpoint
+
+curl -s -X POST http://localhost:8080/policy/save | jq .
+curl -s -X POST http://localhost:8080/policy/load | jq .
+
+
+Quick log peek
+
+tail -n 20 logs/route_log.jsonl
+jq -r 'select(.step_tag!=null) | "\(.step_tag)\t\(.backend)"' logs/route_log.jsonl

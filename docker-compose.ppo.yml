@@ -97,9 +97,9 @@ services:
       # Changed from above to freeze training the model
       SAVE_EVERY_UPDATES: "0"
       UPDATE_EVERY: "100000000"
-      ALPHA_QUALITY: "2.5" # was 1.0 -> emphasize quality ~2.5x stronger
-      BETA_LAT: "0.5" # was 1.0 -> penalize latency half as much
-      GAMMA_COST: "0.002" # was 0.001 -> keep a small cost pressure
+      ALPHA_QUALITY: "${ALPHA_QUALITY_OVERRIDE:-1.0}" # was 1.0 -> emphasize quality ~2.5x stronger
+      BETA_LAT: "${BETA_LAT_OVERRIDE:-1.0}" # was 1.0 -> penalize latency half as much
+      GAMMA_COST: "${GAMMA_COST_OVERRIDE:-0.001}" # was 0.001 -> keep a small cost pressure
       COSTS_PER_TOKEN: "0.5,1.0,0.7"
       ROUTER_JSONL: "/app/logs/route_log_ppo.jsonl"
     ports:

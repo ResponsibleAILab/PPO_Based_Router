@@ -9,9 +9,14 @@ fi
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROMPTS_FILE="$1"
 TAG="$2"
+LOG_LABEL="${LOG_LABEL:-}"
 
 # Bring up router in PPO mode
 docker compose -f "$ROOT_DIR/docker-compose.yml" -f "$ROOT_DIR/docker-compose.ppo.yml" up -d --build rl_router
+
+echo "[PPO] reward config:"
+curl -s http://localhost:8080/health || true
+echo
 
 echo "[PPO] warm-up 3 requests…"
 for i in 1 2 3; do
@@ -50,7 +55,11 @@ done < "$PROMPTS_FILE"
 TS="$(date +%Y%m%d_%H%M%S)"
 LOG_DIR="$ROOT_DIR/logs"
 SRC="$LOG_DIR/route_log_ppo.jsonl"          # <-- matches ROUTER_JSONL
-DST="$LOG_DIR/route_log_ppo_${TAG}_${TS}.jsonl"
+if [[ -n "$LOG_LABEL" ]]; then
+  DST="$LOG_DIR/route_log_ppo_${TAG}_${LOG_LABEL}_${TS}.jsonl"
+else
+  DST="$LOG_DIR/route_log_ppo_${TAG}_${TS}.jsonl"
+fi
 
 if [[ -f "$SRC" ]]; then
   cp "$SRC" "$DST"

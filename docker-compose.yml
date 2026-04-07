@@ -97,9 +97,9 @@ services:
       # Changed from above to freeze training the model
       SAVE_EVERY_UPDATES: "0"
       UPDATE_EVERY: "100000000"
-      ALPHA_QUALITY: "1.0"
-      BETA_LAT: "1.0"
-      GAMMA_COST: "0.001"
+      ALPHA_QUALITY: "${ALPHA_QUALITY_OVERRIDE:-1.0}"
+      BETA_LAT: "${BETA_LAT_OVERRIDE:-1.0}"
+      GAMMA_COST: "${GAMMA_COST_OVERRIDE:-0.001}"
       COSTS_PER_TOKEN: "0.5,1.0,0.7"
     ports:
       - "8080:8080"
