@@ -11,8 +11,8 @@ The code is available at: https://github.com/ResponsibleAILab/PPO_Based_Router
 The diagram below shows the end-to-end routing path. Incoming prompts are tagged by a planner and sent to a selected LLM backend; the observed latency, cost, and quality signals feed the online PPO policy updates.
 
 <p align="left">
-  <img src="images/RL_Router_Architecture.png" alt="RL-Router System Architecture" width="85%">
-  <br><em>RL-Router system architecture: request/inference path (blue), online learning loop (orange), and the containerized backend pool.</em>
+  <img src="Images/Polished_RL Router Architecture_v3.4.drawio.svg" alt="PPO Based Router" width="60%">
+  <br><em>PPO Based Router Architecture</em>
 </p>
 
 ## Key Metrics
