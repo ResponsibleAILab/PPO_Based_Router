@@ -22,7 +22,7 @@ The diagram below shows the end-to-end routing path. Incoming prompts are tagged
 | **Structural Quality (Q)** | Deterministic, task-specific structural-completeness score (code syntax markers, `assert`/`test_` for tests, word count for explanations). Higher is better. |
 | **Mean Latency**| Wall-to-wall time (seconds) from request receipt to backend response, including container and GPU scheduling overhead. Lower is better. |
 | **Mean Reward** | Scalar reward `R = αQ − βL − γC` received per request under the active coefficient configuration.                       |
-| **Mean Cost**   | Normalized token-level cost proxy for the chosen backend. Lower is cheaper.                                            |
+| **Mean Cost**   | Weighted-token cost proxy for the chosen backend (generated tokens scaled by per-backend weights; only the weights are normalized). Lower is cheaper. |
 | **Backend Usage** | How often each backend is selected, which shows whether a method spreads traffic or collapses onto one backend.       |
 
 ## Key Results
@@ -31,10 +31,10 @@ The diagram below shows the end-to-end routing path. Incoming prompts are tagged
 On code tasks, where backend specialization matters most, PPO reaches the highest mean structural quality (0.637) by a wide margin over the bandit baselines, including MOUCB (0.385), which uses the same multi-objective reward. The gap is statistically significant against all five baselines (Mann-Whitney U, one-sided, p < 0.001).
 
 **Backend diversity.**
-Every bandit method, MOUCB included, converges onto a single dominant backend (90–99% of requests) within each task category. PPO is the only method that keeps real traffic on all three backends, sending code requests to CodeLLaMA, explain requests to Mistral, and spreading tests across backends. This comes out of the online reward feedback alone.
+Every bandit method, MOUCB included, converges onto a single dominant backend (90–99% of requests) within each task category (the one exception is ε-greedy on explain at 58%). PPO is the only method that keeps real traffic on all three backends, distributing requests rather than collapsing onto one — on code it spreads across all three with Mistral as the plurality choice (~56%), and Mistral is likewise its plurality pick on explain and tests. This comes out of the online reward feedback alone.
 
 **Latency trade-off.**
-PPO runs at higher latency than the bandit baselines across the board. It gives up some raw reward and responsiveness in exchange for better structural output quality.
+PPO runs at higher latency than the latency-minimizing bandit baselines on every task (ε-greedy on explain is the exception, where cold model-load overhead pushes its mean to 53.68s). It gives up some raw reward and responsiveness in exchange for better structural output quality.
 
 **Takeaway.**
 Multi-model routing is a multi-objective problem. Latency- and cost-sensitive deployments may be better off with a bandit policy, while applications that care most about response quality benefit from RL-based routing that can use backend heterogeneity and request context. The fact that MOUCB shares PPO's reward and still collapses onto one backend points to PPO's advantage coming from conditioning on multi-dimensional state, not from the reward design.
@@ -96,7 +96,7 @@ Here `Q_t` is the deterministic task-specific quality score, `L_t` is end-to-end
 | 1       | LLaMA-3-8B-Instruct    | General-purpose, strong overall quality| 1.0         |
 | 2       | CodeLLaMA-7B-Instruct  | Code-specialized model                 | 0.7         |
 
-The three backends run on Ollama behind per-model MCP adapter services (`mcp_a`, `mcp_b`, `mcp_c`), all brought up with Docker Compose on a shared bridge network. A `planner` service tags each prompt (`code`, `explain`, or `tests`) and forwards it to the `rl_router`, which picks one backend per request. Prometheus, Grafana, cAdvisor, and DCGM handle monitoring.
+The three backends are served by a single shared Ollama instance, each fronted by its own MCP adapter service (`mcp_a`, `mcp_b`, `mcp_c`) that targets Ollama with a different `MODEL_NAME`. All services are brought up with Docker Compose on a shared bridge network. A `planner` service tags each prompt (`code`, `explain`, or `tests`) and forwards it to the `rl_router`, which picks one backend (adapter) per request. Prometheus, Grafana, cAdvisor, and DCGM handle monitoring.
 
 | Service      | Port   | Role                                              |
 | :----------- | :----- | :------------------------------------------------ |
@@ -233,7 +233,9 @@ python3 scripts/analyze_stats.py --logdir logs --outdir stats_results
 
 ## Reproducibility Notes
 
-- Reference hardware: NVIDIA RTX 4060 GPU, Intel i5-14400 CPU, 32 GB RAM, Ubuntu 22.04 LTS, Docker Engine 24.0.
+- Reference hardware: NVIDIA RTX 4060 GPU (8 GB VRAM), Intel i5-14400 CPU, 32 GB RAM, Ubuntu 22.04 LTS, Docker Engine 24.0.
+- Backends run on a single `ollama` service using quantized GGUF weights, fronted by the `mcp_a/b/c` adapters. Because 8 GB of VRAM cannot hold all three 7–8B models at once, Ollama keeps one model resident and loads the selected backend on demand, evicting the previous one. Requests are processed sequentially, so only the active model runs at any instant.
+- Model load time on a backend switch is included in the reported end-to-end latency (this is why switch-heavy runs, e.g. ε-greedy on explain, show much heavier latency tails).
 - Routing logic and logging run on the host CPU; the GPU is reserved for backend inference.
 - All backend containers get the same CPU, memory, and GPU limits, and persistent volumes are cleared between experiments for a clean start.
 - A reward-sensitivity ablation (α=2.5, β=0.5, γ=0.002) is included to check how robust PPO's quality advantage is to the coefficient choice.
@@ -243,11 +245,12 @@ python3 scripts/analyze_stats.py --logdir logs --outdir stats_results
 If you find this work useful, please cite it as follows:
 
 ```bibtex
-@inproceedings{SteeleDingFeng2025PPORouter,
+@inproceedings{SteeleDingFeng2026PPORouter,
   author    = {Michael Steele and Junhua Ding and Yunhe Feng},
   title     = {{PPO}-Based Routing for Containerized Multi-Model Serving Systems},
-  booktitle = {<VENUE -- fill in>},
-  year      = {2025},
-  publisher = {IEEE}
+  booktitle = {Proceedings of the 26th IEEE International Conference on Software Quality, Reliability, and Security (QRS)},
+  series    = {Lecture Notes in Computer Science},
+  year      = {2026},
+  publisher = {Springer}
 }
 ```
